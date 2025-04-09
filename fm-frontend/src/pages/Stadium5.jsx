@@ -1,28 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
 import HeaderComponnent from '../component/HeaderComponent';
 import LeftMenuComponnent from '../component/LeftMenuComponent';
 import FooterComponnent from '../component/FooterComponent';
 import Form from '../component/Form';
 import Offcanvas from '../component/Offcanvas';
 import RowOne from '../component/RowOne';
-import { useState, useEffect } from 'react';
 import Stadium from '../component/Stadium';
+import EditStadium from '../component/EditStadium';
+import DeleteStadium from '../component/DeleteStadium';
+import { fetchData } from '../API/Api';
+import EditPrice from '../component/EditPrice';
+import EditPriceField from '../component/EditPriceField';
 
 function Stadium5() {
   const [sidebarSize, setSidebarSize] = useState('default');
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [listField, setListField] = useState([]);
+  const [stadiumData, setStadiumData] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
-  // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
   };
+  useEffect(() => {
+    fetchData('field')
+      .then((respone) => {
+        setListField(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [refresh]);
 
-  // Cập nhật class cho body khi sidebarSize thay đổi
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium} // Truyền xuống Header
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -50,14 +70,36 @@ function Stadium5() {
                       </div>
                     </div>
                   </div>
-                  <div class="row justify-content-center">
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
+                  <div className="row justify-content-center">
+                    {selectedStadium ? (
+                      listField
+                        .filter(
+                          (f) =>
+                            f.nameStadium?.trim().toLowerCase() ===
+                            selectedStadium.name?.trim().toLowerCase()
+                        )
+                        .map((f, index) => (
+                          <Stadium
+                            key={index}
+                            phoneNumber={selectedStadium.phoneNumber}
+                            address={selectedStadium.address}
+                            field={f}
+                            setStadiumData={setStadiumData}
+                          />
+                        ))
+                    ) : (
+                      <p className="no-data-message">Không có dữ liệu</p> // Hiển thị nếu không chọn sân
+                    )}
+
+                    {/* Nếu không có stadium nào khớp với tên */}
+                    {selectedStadium &&
+                      listField.filter(
+                        (f) =>
+                          f.nameStadium?.trim().toLowerCase() ===
+                          selectedStadium.name?.trim().toLowerCase()
+                      ).length === 0 && (
+                        <p className="no-data-message">Không có dữ liệu</p>
+                      )}
                   </div>
                 </div>
               </div>
@@ -67,9 +109,12 @@ function Stadium5() {
           <FooterComponnent />
         </div>
       </div>
-      <Form />
+      <Form stadiumName={selectedStadium?.name || ''} />{' '}
+      <EditStadium stadiumData={stadiumData} setRefresh={setRefresh} />
+      <EditPrice stadiumData={stadiumData} />
+      <DeleteStadium stadiumData={stadiumData} />
+      <EditPriceField stadiumData={stadiumData} />
     </>
   );
 }
-
 export default Stadium5;

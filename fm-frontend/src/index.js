@@ -23,6 +23,7 @@ import Profile from './pages/Profile';
 import Facility from './pages/Facility';
 import MapGG from './pages/MapGG';
 import WeatherGG from './pages/WeatherGG';
+import Test from './pages/test';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -46,6 +47,7 @@ root.render(
           path="/handle"
           element={<App component={Handle} title="Handle" />}
         />
+        <Route path="/test" element={<App component={Test}/>} />
         <Route path="/map" element={<App component={MapGG} title="Map" />} />
         <Route
           path="/weather"

@@ -1,6 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { postFormData } from '../API/Api';
 
 function AddStadium() {
+  const [image, setImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const resetForm = () => {
+    setImage(null);
+    setPreviewImage(null);
+    setName('');
+    setAddress('');
+    setPhoneNumber('');
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!name || !address || !phoneNumber) {
+      alert('Vui lòng nhập đầy đủ thông tin!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('address', address);
+    formData.append('phoneNumber', phoneNumber);
+    if (image) {
+      formData.append('img', image); // Đảm bảo gửi file đúng
+    }
+
+    try {
+      await postFormData('stadium', formData)
+      alert('Thêm sân vận động thành công!');
+      resetForm();
+    } catch (error) {
+      alert(`${error.response.data.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const modal = document.getElementById('addstadium');
+    if (modal) {
+      modal.addEventListener('hidden.bs.modal', resetForm);
+    }
+
+    return () => {
+      if (modal) {
+        modal.removeEventListener('hidden.bs.modal', resetForm);
+      }
+    };
+  }, []);
+
   return (
     <div
       className="modal fade"
@@ -23,54 +82,72 @@ function AddStadium() {
             ></button>
           </div>
           <div className="modal-body">
-            <form id="form-validation-2" class="form">
-              <div class="mb-2">
-                <label for="username" class="form-label">
+            <form className="form">
+              {/* oneone */}
+              <div className="form-group mb-2">
+                <div className="d-flex align-items-center">
+                  {previewImage ? (
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="rounded border"
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        objectFit: 'cover',
+                        marginRight: '10px',
+                      }}
+                    />
+                  ) : (
+                    <i className="fas fa-image text-muted thumb-xl rounded me-2 border-dashed"></i>
+                  )}
+                  <div className="flex-grow-1 text-truncate">
+                    <label className="btn btn-primary text-light">
+                      Add Image
+                      <input type="file" hidden onChange={handleImageChange} />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {/* twotwo */}
+              <div className="mb-2">
+                <label htmlFor="name" className="form-label">
                   Name
                 </label>
                 <input
-                  class="form-control"
+                  className="form-control"
                   type="text"
-                  id="username"
+                  id="name"
                   placeholder="Enter Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
-                <small>Error Message</small>
               </div>
-              <div class="mb-2">
-                <label for="email" class="form-label">
+              <div className="mb-2">
+                <label htmlFor="address" className="form-label">
                   Address
                 </label>
                 <input
-                  class="form-control"
+                  className="form-control"
                   type="text"
-                  id="email"
+                  id="address"
                   placeholder="Enter Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
-                <small>Error Message</small>
               </div>
-              <div class="mb-2">
-                <label for="password" class="form-label">
-                  Password
+              <div className="mb-2">
+                <label htmlFor="phoneNumber" className="form-label">
+                  Phone Number
                 </label>
                 <input
-                  class="form-control"
-                  type="password"
-                  id="password"
-                  placeholder="Enter password"
+                  className="form-control"
+                  type="text"
+                  id="phoneNumber"
+                  placeholder="Enter phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-                <small>Error Message</small>
-              </div>
-              <div class="mb-3">
-                <label for="password2" class="form-label">
-                  Confirm Password
-                </label>
-                <input
-                  class="form-control"
-                  type="password"
-                  id="password2"
-                  placeholder="Enter password again"
-                />
-                <small>Error Message</small>
               </div>
             </form>
           </div>
@@ -85,7 +162,7 @@ function AddStadium() {
             <button
               type="button"
               className="btn btn-success"
-              data-bs-dismiss="modal"
+              onClick={handleSubmit}
             >
               Send
             </button>

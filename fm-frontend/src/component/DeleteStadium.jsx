@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 
-function DeleteStadium({ stadiumName, onDelete }) {
+function DeleteStadium({ stadiumData }) {
+  const [name, setName] = useState('');
+  const [idField, setIdField] = useState('');
+
+   useEffect(() => {
+      if (stadiumData) {
+        setIdField(stadiumData.idField || '');
+        setName(stadiumData.name || '');
+      }
+    }, [stadiumData]);
   return (
     <div
       className="modal fade"
@@ -23,8 +32,8 @@ function DeleteStadium({ stadiumName, onDelete }) {
             ></button>
           </div>
           <div className="modal-body">
-            Are you sure you want to delete field
-            <strong>{stadiumName}</strong> ?
+            Are you sure you want to delete <span> </span>
+            <strong>{name}</strong> ?
           </div>
           <div className="modal-footer">
             <button
@@ -37,7 +46,6 @@ function DeleteStadium({ stadiumName, onDelete }) {
             <button
               type="button"
               className="btn btn-danger"
-              onClick={onDelete}
               data-bs-dismiss="modal"
             >
               Delete

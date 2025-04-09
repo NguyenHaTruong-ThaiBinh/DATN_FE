@@ -1,12 +1,36 @@
 import React, { useState } from 'react';
-import EditStadium from './EditStadium';
-import DeleteStadium from './DeleteStadium';
 import { useNavigate } from 'react-router-dom';
 
-function Stadium() {
+function Stadium({ field, phoneNumber, address, setStadiumData }) {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
 
+  const handleEditClick = () => {
+    setStadiumData({
+      idField: field.idField,
+      img: field.img,
+      status: field.status,
+      name: field.name,
+    });
+  };
+  const handlePrice = () => {
+    setStadiumData({
+      idField: field.idField,
+      name: field.name,
+    });
+  };
+  const handleEditPrice = () => {
+    setStadiumData({
+      idField: field.idField,
+      name: field.name,
+    });
+  };
+  const handleDelete = () => {
+    setStadiumData({
+      idField: field.idField,
+      name: field.name,
+    });
+  };
   return (
     <>
       <div class="col-md-6 col-lg-4">
@@ -14,8 +38,8 @@ function Stadium() {
           <div class="card-body">
             <div class="">
               <img
-                src="san1.png"
-                alt=""
+                src={field.img}
+                alt="img"
                 class="img-fluid rounded"
                 style={{
                   transform: hover ? 'scale(1.1)' : 'scale(1)',
@@ -25,27 +49,37 @@ function Stadium() {
                 onMouseLeave={() => setHover(false)}
               />
               <div class="mt-3">
-                <span class="badge bg-purple-subtle text-purple px-2 py-1 fw-semibold ">
-                  Online
+                <span
+                  className={`badge px-2 py-1 fw-semibold ${
+                    field.status === 'ACTIVE'
+                      ? 'bg-purple-subtle text-purple'
+                      : 'bg-secondary text-light'
+                  }`}
+                >
+                  {field.status}
                 </span>{' '}
                 |
-                <p class="mb-0 text-muted fs-12 d-inline-block">
-                  Yen Hoa Stadium
+                <p className="mb-0 text-muted fs-12 d-inline-block">
+                  <span className="fw-semibold text-dark me-1">
+                    🏟️ Stadium:
+                  </span>
+                  <span className="text-primary">{field.nameStadium}</span>
                 </p>
               </div>
               <div className="d-flex justify-content-between align-items-center">
                 <a
-                  href="#"
+                  href="/"
                   className="d-block fs-22 fw-semibold text-body my-2 text-truncate"
                 >
-                  FIELD 1 <span>⚽</span>
+                  <span>⚽</span>
+                  {field.name}
                 </a>
                 <div className="dropdown d-inline-block">
                   <a
                     className="dropdown-toggle arrow-none"
                     id="dLabel11"
                     data-bs-toggle="dropdown"
-                    href="#"
+                    href="/"
                     role="button"
                     aria-haspopup="false"
                     aria-expanded="false"
@@ -58,27 +92,40 @@ function Stadium() {
                   >
                     <a
                       className="dropdown-item"
-                      href="#"
+                      href="/"
                       data-bs-toggle="modal"
                       data-bs-target="#editStadium"
+                      onClick={handleEditClick}
                     >
                       <i className="fas fa-pen me-2 text-primary"></i> Edit
                       Field
                     </a>
                     <a
                       className="dropdown-item"
-                      href="#"
+                      href="/"
                       data-bs-toggle="modal"
-                      data-bs-target="#"
+                      data-bs-target="#editPrice"
+                      onClick={handlePrice}
+                    >
+                      <i className="fas fa-dollar-sign me-2 text-warning"></i>{' '}
+                      Price
+                    </a>
+                    <a
+                      className="dropdown-item"
+                      href="/"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editpricefield"
+                      onClick={handleEditPrice}
                     >
                       <i className="fas fa-dollar-sign me-2 text-warning"></i>{' '}
                       Edit Price
                     </a>
                     <a
                       className="dropdown-item"
-                      href="#"
+                      href="/"
                       data-bs-toggle="modal"
                       data-bs-target="#deleteStadium"
+                      onClick={handleDelete}
                     >
                       <i className="fas fa-trash-alt me-2 text-danger"></i>{' '}
                       Delete
@@ -87,8 +134,7 @@ function Stadium() {
                 </div>
               </div>
               <p class="text-muted">
-                It is a long established fact that a reader will be distracted
-                by the readable content of a page when looking at its layout.
+                <span>📍</span> {address}
               </p>
               <hr class="hr-dashed" />
               <div class="d-flex justify-content-between">
@@ -101,9 +147,8 @@ function Stadium() {
                     />
                   </div>
                   <div class="flex-grow-1 ms-2 text-truncate text-start">
-                    <h6 class="m-0 text-dark">Contact</h6>
-                    <p class="mb-0 text-muted">
-                      by <a href="#">+84393878300</a>
+                    <p className="mb-0 text-muted">
+                      📞<span>{phoneNumber}</span>
                     </p>
                   </div>
                 </div>
@@ -120,9 +165,6 @@ function Stadium() {
           </div>
         </div>
       </div>
-      {/* Modals */}
-      <EditStadium />
-      <DeleteStadium />
     </>
   );
 }

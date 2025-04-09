@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function EditStadium() {
+import { updateFormData } from '../API/Api';
+
+function EditStadium({ stadiumData, setRefresh }) {
+  const [idField, setIdField] = useState('');
   const [status, setStatus] = useState('on');
-  const [type, setType] = useState('7');
-  const [time, setTime] = useState('7');
-  const [image, setImage] = useState('san1.png');
+  const [name, setName] = useState('');
+  const [nameType, setNameType] = useState('');
+  const [img, setImg] = useState('san1.png');
+  const [imgFile, setImgFile] = useState(null);
+
+  useEffect(() => {
+    if (stadiumData) {
+      setIdField(stadiumData.idField || '');
+      setStatus(stadiumData.status || 'on');
+      setNameType(stadiumData.nameType || '');
+      setImg(stadiumData.img || '');
+      setName(stadiumData.name || '');
+    }
+  }, [stadiumData]);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -13,10 +27,38 @@ function EditStadium() {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      setImg(URL.createObjectURL(file));
+      setImgFile(file);
+    }
+    setImgFile(file);
+  };
+  const handleSave = async () => {
+    const formData = new FormData();
+    formData.append('idField', idField);
+    formData.append('name', name);
+    formData.append('status', status);
+    if (imgFile) {
+      formData.append('img', imgFile);
+    } else {
+      const emptyFile = new Blob([], { type: 'application/octet-stream' });
+      formData.append('img', emptyFile, 'emptyFile');
+    }
+    try {
+      await updateFormData('field', idField, formData);
+      alert('Update Success');
+      document.querySelector('#editStadium [data-bs-dismiss="modal"]')?.click();
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      console.error('Lỗi cập nhật:', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(error.response.data.message);
+      }
     }
   };
-
   return (
     <>
       <div
@@ -43,7 +85,7 @@ function EditStadium() {
               {/* Hiển thị ảnh trước */}
               <div className="form-group mb-2 text-center">
                 <img
-                  src={image}
+                  src={img}
                   alt="Stadium"
                   className="img-thumbnail rounded"
                   style={{
@@ -62,7 +104,7 @@ function EditStadium() {
 
               {/* Các input khác */}
               <div className="mb-2">
-                <label htmlFor="stadiumName">Stadium Name</label>
+                <label htmlFor="stadiumName"> Name</label>
                 <div className="input-group">
                   <span className="input-group-text" id="stadiumName">
                     <i className="fas fa-futbol"></i>
@@ -72,6 +114,8 @@ function EditStadium() {
                     className="form-control"
                     placeholder="Stadium Name"
                     aria-label="Stadium Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
               </div>
@@ -84,10 +128,9 @@ function EditStadium() {
                   </span>
                   <select
                     className="form-control"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
+                    value={nameType}
+                    onChange={(e) => setNameType(e.target.value)}
                   >
-                    <option value="5">5</option>
                     <option value="7">7</option>
                     <option value="11">11</option>
                   </select>
@@ -100,7 +143,9 @@ function EditStadium() {
                   <span className="input-group-text">
                     <i
                       className={`fas fa-toggle-${
-                        status === 'on' ? 'on text-success' : 'off text-muted'
+                        status === 'ACTIVE'
+                          ? 'on text-success'
+                          : 'off text-muted'
                       }`}
                     ></i>
                   </span>
@@ -109,57 +154,18 @@ function EditStadium() {
                     value={status}
                     onChange={handleStatusChange}
                   >
-                    <option value="on">On</option>
-                    <option value="off">Off</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
                   </select>
                 </div>
               </div>
-
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="mb-2">
-                    <label htmlFor="time">Time</label>
-                    <div className="input-group">
-                      <span className="input-group-text">
-                        <i className="far fa-clock"></i>
-                      </span>
-                      <select
-                        className="form-control"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                      >
-                        <option value="7">07:00</option>
-                        <option value="10">10:00</option>
-                        <option value="13">13:00</option>
-                        <option value="16">16:00</option>
-                        <option value="19">19:00</option>
-                        <option value="22">22:00</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-md-6">
-                  <div className="mb-2">
-                    <label htmlFor="price">Price</label>
-                    <div className="input-group">
-                      <span className="input-group-text">
-                        <i className="fas fa-dollar-sign"></i>
-                      </span>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Price"
-                        aria-label="Price"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary w-100">
+              <button
+                type="button"
+                className="btn btn-primary w-100"
+                onClick={handleSave}
+              >
                 Save Changes
               </button>
             </div>
