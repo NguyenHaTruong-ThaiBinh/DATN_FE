@@ -1,36 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-function Test({ selectedStadium }) {
-  const [data, setData] = useState([]);
+function StadiumTable({ listField }) {
+  const [selectedFields, setSelectedFields] = useState([]); // Danh sách sân đã tick
 
-  useEffect(() => {
-    // Nếu có selectedStadium, có thể sử dụng nó trong API call hoặc logic khác
-    axios
-      .get('http://localhost:8080/manager/stadium')
-      .then((response) => {
-        console.log('Dữ liệu từ API:', response.data);
-        setData(response.data.result || []); // Lấy mảng result nếu có
-      })
-      .catch((error) => {
-        console.error('Lỗi khi lấy dữ liệu:', error);
-      });
-  }, []);
+  const handleCheckboxChange = (fieldId) => {
+    setSelectedFields((prevSelected) =>
+      prevSelected.includes(fieldId)
+        ? prevSelected.filter((id) => id !== fieldId)
+        : [...prevSelected, fieldId]
+    );
+  };
+
+  const handleCheckAll = (e) => {
+    const isChecked = e.target.checked;
+    const allIds = listField.map((field) => field.idField);
+    setSelectedFields(isChecked ? allIds : []);
+  };
 
   return (
-    <div>
-      <h2>Danh sách sân vận động</h2>
-      {selectedStadium && <h3>Sân đã chọn: {selectedStadium}</h3>}{' '}
-      {/* Hiển thị sân đã chọn */}
-      <ul>
-        {data.map((item, index) => (
-          <li key={index}>
-            <img src={item.img} alt={item.name} width="200" height="150" />
-          </li>
-        ))}
-      </ul>
+    <div className="mb-2">
+      <div className="card">
+        <div className="card-body pt-0">
+          <div className="table-responsive">
+            <table className="table table-hover mb-0">
+              <thead className="table-light">
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      onChange={handleCheckAll}
+                      checked={
+                        listField.length > 0 &&
+                        listField.every((field) =>
+                          selectedFields.includes(field.idField)
+                        )
+                      }
+                    />
+                  </th>
+                  <th>Name Stadium</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listField.map((field, index) => (
+                  <tr key={field.idField}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedFields.includes(field.idField)}
+                        onChange={() => handleCheckboxChange(field.idField)}
+                      />
+                    </td>
+                    <td>{field.name}</td>
+                    <td>7</td>
+                    <td>{field.status === 'ACTIVE' ? 'Online' : 'Offline'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Test;
+export default StadiumTable;

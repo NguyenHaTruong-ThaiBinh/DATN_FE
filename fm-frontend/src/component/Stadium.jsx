@@ -107,8 +107,7 @@ function Stadium({ field, phoneNumber, address, setStadiumData }) {
                       data-bs-target="#editPrice"
                       onClick={handlePrice}
                     >
-                      <i className="fas fa-dollar-sign me-2 text-warning"></i>{' '}
-                      Price
+                      <i className="fas fa-eye me-2 text-primary"></i> View Price
                     </a>
                     <a
                       className="dropdown-item"

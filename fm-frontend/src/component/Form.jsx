@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import { fetchData, postFormData } from '../API/Api';
 
-function Form({ stadiumName }) {
+function Form({ stadiumName, setRefresh }) {
   const [status, setStatus] = useState('on');
   const [nameField, setNameField] = useState('');
   const [nameStadium, setNameStadium] = useState('');
@@ -13,7 +12,7 @@ function Form({ stadiumName }) {
   const [typeList, setTypeList] = useState([]);
 
   useEffect(() => {
-    setNameStadium(stadiumName); // Gán giá trị stadiumName từ props khi Form mount
+    setNameStadium(stadiumName); // Gán giá trị stadiumName từ props khi Form mount kiểm tra sự thay đổi từ component cha xuống con
   }, [stadiumName]);
 
   const handleSubmit = async () => {
@@ -34,6 +33,8 @@ function Form({ stadiumName }) {
       await postFormData('field', formData);
       alert('Thêm thành công!');
       handleReset();
+      document.querySelector('#addUser [data-bs-dismiss="modal"]')?.click();
+      setRefresh((prev) => !prev);
     } catch (error) {
       alert(`${error.response.data.message}`);
     }
@@ -79,7 +80,6 @@ function Form({ stadiumName }) {
       modal.removeEventListener('hidden.bs.modal', handleReset);
     };
   }, [stadiumName]);
-
   return (
     <>
       <div
@@ -178,7 +178,7 @@ function Form({ stadiumName }) {
                   >
                     <option value="">-- Select Type --</option>
                     {typeList.map((t) => (
-                      <option key={t.idType} value={t.nameType}>
+                      <option key={t.idType} value={t.name}>
                         {t.name}
                       </option>
                     ))}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import HeaderComponnent from '../component/HeaderComponent';
-import LeftMenuComponnent from '../component/LeftMenuComponent';
+import HeaderComponent from '../component/HeaderComponent';
+import LeftMenuComponent from '../component/LeftMenuComponent';
 import FooterComponnent from '../component/FooterComponent';
 import Form from '../component/Form';
 import Offcanvas from '../component/Offcanvas';
@@ -10,8 +10,8 @@ import Stadium from '../component/Stadium';
 import EditStadium from '../component/EditStadium';
 import DeleteStadium from '../component/DeleteStadium';
 import { fetchData } from '../API/Api';
-import EditPrice from '../component/EditPrice';
 import EditPriceField from '../component/EditPriceField';
+import ViewPrice from '../component/ViewPrice';
 
 function Stadium5() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -19,6 +19,7 @@ function Stadium5() {
   const [listField, setListField] = useState([]);
   const [stadiumData, setStadiumData] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [isFresh, setIsFresh] = useState(false);
 
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -32,18 +33,18 @@ function Stadium5() {
         console.error(err);
       });
   }, [refresh]);
-
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
+
   return (
     <>
-      <HeaderComponnent
+      <HeaderComponent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}
         setSelectedStadium={setSelectedStadium} // Truyền xuống Header
       />
-      <LeftMenuComponnent />
+      <LeftMenuComponent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
         <div className="page-content">
@@ -76,7 +77,9 @@ function Stadium5() {
                         .filter(
                           (f) =>
                             f.nameStadium?.trim().toLowerCase() ===
-                            selectedStadium.name?.trim().toLowerCase()
+                              selectedStadium.name?.trim().toLowerCase() &&
+                            f.nameType === '7' &&
+                            f.enable === 'ENABLE'
                         )
                         .map((f, index) => (
                           <Stadium
@@ -109,11 +112,11 @@ function Stadium5() {
           <FooterComponnent />
         </div>
       </div>
-      <Form stadiumName={selectedStadium?.name || ''} />{' '}
+      <Form stadiumName={selectedStadium?.name || ''} setRefresh={setRefresh} />
       <EditStadium stadiumData={stadiumData} setRefresh={setRefresh} />
-      <EditPrice stadiumData={stadiumData} />
-      <DeleteStadium stadiumData={stadiumData} />
-      <EditPriceField stadiumData={stadiumData} />
+      <ViewPrice stadiumData={stadiumData} isFresh={isFresh} />
+      <DeleteStadium stadiumData={stadiumData} setRefresh={setRefresh} />
+      <EditPriceField stadiumData={stadiumData} setIsFresh={setIsFresh} />
     </>
   );
 }

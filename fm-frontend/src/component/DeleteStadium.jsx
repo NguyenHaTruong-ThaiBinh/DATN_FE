@@ -1,15 +1,35 @@
 import React, { useState,useEffect } from 'react';
+import { updateEnableField } from '../API/Api';
 
-function DeleteStadium({ stadiumData }) {
+function DeleteStadium({ stadiumData, setRefresh }) {
   const [name, setName] = useState('');
   const [idField, setIdField] = useState('');
 
-   useEffect(() => {
-      if (stadiumData) {
-        setIdField(stadiumData.idField || '');
-        setName(stadiumData.name || '');
+  useEffect(() => {
+    if (stadiumData) {
+      setIdField(stadiumData.idField || '');
+      setName(stadiumData.name || '');
+    }
+  }, [stadiumData]);
+  const handleRemove = async () => {
+    try {
+      await updateEnableField('field', idField);
+      alert('Remove Success');
+      document
+        .querySelector('#deleteStadium [data-bs-dismiss="modal"]')
+        ?.click();
+      setRefresh((prev) => !prev);
+    } catch (error) {
+      console.error('Lỗi cập nhật:', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(error.response.data.message);
       }
-    }, [stadiumData]);
+    }
+  };
   return (
     <div
       className="modal fade"
@@ -22,7 +42,7 @@ function DeleteStadium({ stadiumData }) {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="deleteStadiumLabel">
-              Delete
+              Remove Field
             </h5>
             <button
               type="button"
@@ -47,6 +67,7 @@ function DeleteStadium({ stadiumData }) {
               type="button"
               className="btn btn-danger"
               data-bs-dismiss="modal"
+              onClick={handleRemove}
             >
               Delete
             </button>

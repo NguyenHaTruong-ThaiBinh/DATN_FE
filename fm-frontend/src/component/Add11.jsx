@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { fetchDataByIdTypeAndIdStadium } from '../API/Api';
 
-function Add11() {
-  const [status, setStatus] = useState('on');
-  const [name, setName] = useState('');
-  const [image, setImage] = useState(null);
-  const [type, setType] = useState('7');
+function Add11({ IdStadium }) {
+  const [selectedField11, setSelectedField11] = useState('');
+  const [selectedField7, setSelectedField7] = useState('');
+  const [idStadium, setIdStadium] = useState('');
+  const [listField11, setListField11] = useState([]);
+  const [listField7, setListField7] = useState([]);
 
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
-  };
+  useEffect(() => {
+    setIdStadium(IdStadium);
+    setSelectedField7('');
+    setSelectedField11('');
+  }, [IdStadium]);
 
   const handleReset = () => {
-    setStatus('on');
-    setName('');
-    setImage(null);
-    setType('7');
+    setSelectedField7('');
+    setSelectedField11('');
   };
-
   useEffect(() => {
     const modal = document.getElementById('add11');
     modal.addEventListener('hidden.bs.modal', handleReset);
@@ -24,7 +25,34 @@ function Add11() {
     return () => {
       modal.removeEventListener('hidden.bs.modal', handleReset);
     };
-  }, []);
+  }, [IdStadium]);
+  useEffect(() => {
+    if (idStadium) {
+      fetchDataByIdTypeAndIdStadium('field', 1, idStadium)
+        .then((respone) => {
+          if (respone.data.code === 200) {
+            setListField7(respone.data.result);
+          }
+        })
+        .catch((err) => {
+          console.log('Error', err);
+        });
+    }
+  }, [idStadium]);
+
+  useEffect(() => {
+    if (idStadium) {
+      fetchDataByIdTypeAndIdStadium('field', 2, idStadium)
+        .then((respone) => {
+          if (respone.data.code === 200) {
+            setListField11(respone.data.result);
+          }
+        })
+        .catch((err) => {
+          console.log('Error', err);
+        });
+    }
+  }, [idStadium]);
 
   return (
     <>
@@ -39,7 +67,7 @@ function Add11() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="addUserLabel">
-                Add Stadium
+                Add Field
               </h5>
               <button
                 type="button"
@@ -49,106 +77,44 @@ function Add11() {
               ></button>
             </div>
             <div className="modal-body">
-              <div className="form-group mb-2">
-                <div className="d-flex align-items-center">
-                  <i className="fas fa-image text-muted thumb-xl rounded me-2 border-dashed"></i>
-                  <div className="flex-grow-1 text-truncate">
-                    <label className="btn btn-primary text-light">
-                      Add Image
-                      <input
-                        type="file"
-                        hidden
-                        onChange={(e) => setImage(e.target.files[0])}
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div className="mb-2">
-                <label htmlFor="fullName">Stadium Name</label>
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i className="fas fa-futbol"></i>
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Stadium Name"
-                    aria-label="FullName"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="mb-2">
-                <label htmlFor="type">Type</label>
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i className="fas fa-th-large"></i>
-                  </span>
+              <div className="row">
+                <div className="col-md-6 mb-2">
+                  <label htmlFor="field11Select" className="form-label">
+                    Field 11
+                  </label>
                   <select
-                    className="form-control"
-                    aria-label="Type"
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
+                    className="form-select"
+                    value={selectedField11}
+                    onChange={(e) => setSelectedField11(e.target.value)}
                   >
-                    <option value="11">11</option>
+                    <option value="">Select Field 11</option>
+                    {listField11
+                      .filter((item) => item.idField !== selectedField7)
+                      .map((item, index) => (
+                        <option key={index} value={item.idField}>
+                          {item.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
-              </div>
-              <div className="mb-2">
-                <label htmlFor="status">Status</label>
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i
-                      className={`fas fa-toggle-${
-                        status === 'on' ? 'on text-success' : 'off text-muted'
-                      }`}
-                    ></i>
-                  </span>
+                <div className="col-md-6 mb-2">
+                  <label htmlFor="field7Select" className="form-label">
+                    Field 7
+                  </label>
                   <select
-                    className="form-control"
-                    aria-label="Status"
-                    value={status}
-                    onChange={handleStatusChange}
+                    className="form-select"
+                    value={selectedField7}
+                    onChange={(e) => setSelectedField7(e.target.value)}
                   >
-                    <option value="on">On</option>
-                    <option value="off">Off</option>
+                    <option value="">Select Field 7</option>
+                    {listField7
+                      .filter((item) => item.idField !== selectedField11)
+                      .map((item, index) => (
+                        <option key={index} value={item.idField}>
+                          {item.name}
+                        </option>
+                      ))}
                   </select>
-                </div>
-              </div>
-              <div className="mb-2">
-                <label htmlFor="List Stadium">List</label>
-                <div className="input-group">
-                  <select className="form-select">
-                    <option defaultValue>7vs7</option>
-                    <option value="1">Stadium 1</option>
-                    <option value="2">Stadium 2</option>
-                  </select>
-                </div>
-                <div class="card">
-                  <div class="card-body pt-0">
-                    <div class="table-responsive">
-                      <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                          <tr>
-                            <th>#</th>
-                            <th>Name Stadium</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>S7</td>
-                            <td>7</td>
-                            <td>Online</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

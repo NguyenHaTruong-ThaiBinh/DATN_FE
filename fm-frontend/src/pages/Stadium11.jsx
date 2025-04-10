@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchData } from '../API/Api';
 import HeaderComponnent from '../component/HeaderComponent';
 import LeftMenuComponnent from '../component/LeftMenuComponent';
 import FooterComponnent from '../component/FooterComponent';
 import Offcanvas from '../component/Offcanvas';
 import RowOne from '../component/RowOne';
-import { useState, useEffect } from 'react';
 import Stadium from '../component/Stadium';
 import Add11 from '../component/Add11';
+import EditStadium from '../component/EditStadium';
 
 function Stadium11() {
   const [sidebarSize, setSidebarSize] = useState('default');
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [listField, setListField] = useState([]);
+  const [stadiumData, setStadiumData] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
-  // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
   };
 
-  // Cập nhật class cho body khi sidebarSize thay đổi
+  useEffect(() => {
+    fetchData('field')
+      .then((respone) => {
+        setListField(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [refresh]);
+
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
+
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -50,14 +68,38 @@ function Stadium11() {
                       </div>
                     </div>
                   </div>
-                  <div class="row justify-content-center">
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
-                    <Stadium />
+                  <div className="row justify-content-center">
+                    {selectedStadium ? (
+                      listField
+                        .filter(
+                          (f) =>
+                            f.nameStadium?.trim().toLowerCase() ===
+                              selectedStadium.name?.trim().toLowerCase() &&
+                            f.nameType === '11' &&
+                            f.enable === 'ENABLE'
+                        )
+                        .map((f, index) => (
+                          <Stadium
+                            key={index}
+                            phoneNumber={selectedStadium.phoneNumber}
+                            address={selectedStadium.address}
+                            field={f}
+                            setStadiumData={setStadiumData}
+                          />
+                        ))
+                    ) : (
+                      <p className="no-data-message">Không có dữ liệu</p> // Hiển thị nếu không chọn sân
+                    )}
+
+                    {/* Nếu không có stadium nào khớp với tên */}
+                    {selectedStadium &&
+                      listField.filter(
+                        (f) =>
+                          f.nameStadium?.trim().toLowerCase() ===
+                          selectedStadium.name?.trim().toLowerCase()
+                      ).length === 0 && (
+                        <p className="no-data-message">Không có dữ liệu</p>
+                      )}
                   </div>
                 </div>
               </div>
@@ -67,7 +109,11 @@ function Stadium11() {
           <FooterComponnent />
         </div>
       </div>
-      <Add11/>
+      <Add11
+        IdStadium={selectedStadium?.idStadium || ''}
+        setRefresh={setRefresh}
+      />
+      <EditStadium stadiumData={stadiumData} setRefresh={setRefresh} />
     </>
   );
 }

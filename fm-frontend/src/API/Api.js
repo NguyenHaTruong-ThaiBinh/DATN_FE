@@ -1,7 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/manager';
-
 
 //get
 export const fetchData = (endpoint) => {
@@ -15,7 +14,7 @@ export const postFormData = (endpoint, formData) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-}
+};
 //put
 export const updateFormData = (endpoint, id, formData) => {
   return axios.put(`${API_BASE_URL}/${endpoint}/${id}`, formData, {
@@ -25,6 +24,19 @@ export const updateFormData = (endpoint, id, formData) => {
   });
 };
 
+//getById
 export const fetchDataById = (endpoint, id) => {
   return axios.get(`${API_BASE_URL}/${endpoint}/${id}`);
+};
+
+//getByIdTypeAndIdStadium
+
+//putEnableField
+export const updateEnableField = (endpoint, id) => {
+  return axios.put(`${API_BASE_URL}/${endpoint}/${id}/enable`);
+};
+
+//getFieldByIdTypeAndIdStadium
+export const fetchDataByIdTypeAndIdStadium = (endpoint, idType, idStadium) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idType}/${idStadium}`);
 };

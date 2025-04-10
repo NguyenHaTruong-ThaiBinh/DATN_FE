@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData, fetchDataById } from '../API/Api';
 
-function EditPrice({ stadiumData }) {
+function ViewPrice({ stadiumData, isFresh}) {
   const [name, setName] = useState('');
   const [idField, setIdField] = useState('');
   const [listTime, setListTime] = useState([]);
   const [listPriceField, setListPriceField] = useState([]);
-
   useEffect(() => {
     fetchData('time')
       .then((respone) => {
@@ -33,7 +32,7 @@ function EditPrice({ stadiumData }) {
           console.error(err);
         });
     }
-  }, [idField]);
+  }, [idField,isFresh]);
   return (
     <div
       className="modal fade"
@@ -114,4 +113,4 @@ function EditPrice({ stadiumData }) {
   );
 }
 
-export default EditPrice;
+export default ViewPrice;

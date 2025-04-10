@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { fetchData } from '../API/Api';
+import {
+  fetchData,
+  fetchDataById,
+  postFormData,
+  updateFormData,
+} from '../API/Api';
 
-function EditPriceField({ stadiumData }) {
+function EditPriceField({ stadiumData, setIsFresh }) {
   const [name, setName] = useState('');
   const [idField, setIdField] = useState('');
   const [listTime, setListTime] = useState([]);
   const [selectedTime, setSelectedTime] = useState('');
   const [price, setPrice] = useState('');
-
+  const [listPriceField, setListPriceField] = useState([]);
+  const [idPrice, setIdPrice] = useState('');
   useEffect(() => {
     fetchData('time')
       .then((respone) => {
@@ -25,6 +31,70 @@ function EditPriceField({ stadiumData }) {
       setPrice('');
     }
   }, [stadiumData]);
+  useEffect(() => {
+    if (idField) {
+      fetchDataById('price', idField)
+        .then((respone) => {
+          setListPriceField(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idField]);
+
+  useEffect(() => {
+    if (!selectedTime) {
+      setPrice('');
+      setIdPrice('');
+      return;
+    }
+    if (selectedTime && listPriceField.length > 0) {
+      const selectedPriceItem = listPriceField.find(
+        (item) => item.idTime === parseInt(selectedTime)
+      );
+      if (selectedPriceItem) {
+        setPrice(selectedPriceItem.price);
+        setIdPrice(selectedPriceItem.idPrice);
+      } else {
+        setPrice('');
+      }
+    }
+  }, [selectedTime, listPriceField]);
+  const handleSavePrice = async () => {
+    if (!selectedTime || !price) {
+      alert('Fill all information');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('idField', idField);
+    formData.append('idTime', selectedTime);
+    formData.append('price', price);
+    try {
+      await postFormData('price', formData);
+      alert('Success!');
+      setIsFresh((prev) => !prev);
+      document
+        .querySelector('#editpricefield [data-bs-dismiss="modal"]')
+        ?.click();
+    } catch (error) {
+      alert(`${error.response.data.message}`);
+    }
+  };
+  const handleUpdatePrice = async () => {
+    const formData = new FormData();
+    formData.append('price', price);
+    try {
+      await updateFormData('price', idPrice, formData);
+      alert('Update Success');
+      setIsFresh((prev) => !prev);
+      document
+        .querySelector('#editpricefield [data-bs-dismiss="modal"]')
+        ?.click();
+    } catch (error) {
+      alert(error.response?.data?.message || 'Update thất bại!');
+    }
+  };
   return (
     <>
       <div
@@ -62,7 +132,7 @@ function EditPriceField({ stadiumData }) {
                   >
                     <option value="">Select Time</option>
                     {listTime.map((item, index) => (
-                      <option key={index} value={item.id}>
+                      <option key={index} value={item.idTime}>
                         {item.time}
                       </option>
                     ))}
@@ -83,11 +153,15 @@ function EditPriceField({ stadiumData }) {
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-bs-dismiss="modal"
+                onClick={handleUpdatePrice}
               >
-                Cancel
+                Update
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSavePrice}
+              >
                 Save
               </button>
             </div>
