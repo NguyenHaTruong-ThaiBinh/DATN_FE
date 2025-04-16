@@ -4,22 +4,40 @@ import FooterComponnent from '../component/FooterComponent';
 import Offcanvas from '../component/Offcanvas';
 import RowOne from '../component/RowOne';
 import { useState, useEffect } from 'react';
+import { fetchData } from '../API/Api';
+import ModalRemoveUser from '../component/ModalRemoveUser';
+import ModalUpdateRoleUser from '../component/ModalUpdateRoleUser';
 
 function Users() {
   const [sidebarSize, setSidebarSize] = useState('default');
-
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [listUsers, setListUser] = useState([]);
+  const [userData, setUserData] = useState('');
+  const [isRefresh, setIsRefresh] = useState(false);
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
   };
-
+  useEffect(() => {
+    fetchData('users')
+      .then((respone) => {
+        setListUser(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [isRefresh]);
   // Cập nhật class cho body khi sidebarSize thay đổi
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -38,63 +56,78 @@ function Users() {
                     </div>
                   </div>
                   <div className="card-body pt-0">
-                    <div className="table-responsive">
-                      <table className="table mb-0" id="datatable_1">
-                        <thead className="table-light">
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>PhoneNumber</th>
-                            <th>Password</th>
-                            <th>Role</th>
-                            <th className="text-end">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="d-flex align-items-center">
-                              <div className="d-flex align-items-center">
-                                <img
-                                  src="assets/images/users/avatar-2.jpg"
-                                  className="me-2 thumb-md align-self-center rounded"
-                                  alt="..."
-                                />
-                                <div className="flex-grow-1 text-truncate">
-                                  <h6 className="m-0">Karen Savage</h6>
-                                  <p className="fs-12 text-muted mb-0">USA</p>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <a
-                                href="#"
-                                className="text-body text-decoration-underline"
-                              >
-                                extradummy@gmail.com
-                              </a>
-                            </td>
-                            <td>+1 234 567 890</td>
-                            <td>07 May 2024</td>
-                            <td>
-                              <span className="badge rounded text-success bg-success-subtle">
-                                Active
-                              </span>
-                            </td>
-                            <td className="text-end">
-                              <a href="#">
-                                <i className="fas fa-align-justify"></i>
-                              </a>
-                              <a href="#">
-                                <i className="las la-pen text-secondary fs-18"></i>
-                              </a>
-                              <a href="#">
-                                <i className="las la-trash-alt text-secondary fs-18"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                    {listUsers.length > 0 ? (
+                      <div className="table-responsive mt-4">
+                        <table className="table table-bordered table-hover text-center">
+                          <thead className="table-light">
+                            <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>PhoneNumber</th>
+                              <th>Password</th>
+                              <th>Role</th>
+                              <th className="text-center">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {listUsers
+                              .filter((user) => user.enable === 'ENABLE')
+                              .map((user, index) => (
+                                <tr key={index}>
+                                  <td>{index + 1}</td>
+                                  <td>
+                                    <h6 className="m-0">{user.name}</h6>
+                                  </td>
+                                  <td>{user.email}</td>
+                                  <td>{user.phoneNumber}</td>
+                                  <td>{user.password}</td>
+                                  <td>
+                                    <span className="badge rounded text-success bg-success-subtle">
+                                      {user.nameRole}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <a href="#a" className="me-2">
+                                      <i className="fas fa-align-justify"></i>
+                                    </a>
+                                    <a
+                                      href="#a"
+                                      className="me-2"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#updaterole"
+                                      onClick={() =>
+                                        setUserData({
+                                          id: user.idUser,
+                                          name: user.name,
+                                          nameRole: user.nameRole,
+                                        })
+                                      }
+                                    >
+                                      <i className="las la-pen text-secondary fs-18"></i>
+                                    </a>
+                                    <a
+                                      href="#a"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#removeuser"
+                                      onClick={() =>
+                                        setUserData({
+                                          id: user.idUser,
+                                          name: user.name,
+                                        })
+                                      }
+                                    >
+                                      <i className="las la-trash-alt text-secondary fs-18"></i>
+                                    </a>
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <p className="no-data-message mt-3">No data available</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -104,6 +137,8 @@ function Users() {
           <FooterComponnent />
         </div>
       </div>
+      <ModalRemoveUser user={userData} setIsRefresh={setIsRefresh} />
+      <ModalUpdateRoleUser user={userData} setIsRefresh={setIsRefresh} />
     </>
   );
 }

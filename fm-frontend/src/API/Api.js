@@ -15,6 +15,16 @@ export const postFormData = (endpoint, formData) => {
     },
   });
 };
+
+//postPay
+export const postPayFromData = (endpoint, formData) => {
+  return axios.post(`${API_BASE_URL}/${endpoint}/vnpay-return`, formData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 //put
 export const updateFormData = (endpoint, id, formData) => {
   return axios.put(`${API_BASE_URL}/${endpoint}/${id}`, formData, {
@@ -39,4 +49,23 @@ export const updateEnableField = (endpoint, id) => {
 //getFieldByIdTypeAndIdStadium
 export const fetchDataByIdTypeAndIdStadium = (endpoint, idType, idStadium) => {
   return axios.get(`${API_BASE_URL}/${endpoint}/${idType}/${idStadium}`);
+};
+
+//getFieldByIdType11AndIdStadium
+export const fetchDataByIdType11AndIdStadium = (
+  endpoint,
+  idType,
+  idStadium
+) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idType}/${idStadium}/Type11`);
+};
+
+//updateRoleUser
+export const updateRoleUser = (endpoint, id) => {
+  return axios.put(`${API_BASE_URL}/${endpoint}/${id}/role`);
+};
+
+//getTimeByIdFieldAndDay
+export const fetchDataByIdFieldAndDay = (endpoint, idField, day) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idField}/${day}`);
 };

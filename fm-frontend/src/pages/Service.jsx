@@ -7,10 +7,17 @@ import RowOne from '../component/RowOne';
 import { useState, useEffect } from 'react';
 import FormService from '../component/FormService';
 import ServiceItem from '../component/ServiceItem';
+import { fetchDataById } from '../API/Api';
+import ModalRemoveServices from '../modal/ModalRemoveServices';
+import ModalUpdateServices from '../modal/ModalUpdateServices';
 
 function Service() {
   const [sidebarSize, setSidebarSize] = useState('default');
-
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [idStadium, setIdStadium] = useState('');
+  const [listServices, setListServices] = useState([]);
+  const [servicesData, setServicesData] = useState('');
+  const [isRefresh, setIsRefresh] = useState(false);
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -20,9 +27,26 @@ function Service() {
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
+  useEffect(() => {
+    if (selectedStadium && selectedStadium.idStadium) {
+      setIdStadium(selectedStadium.idStadium);
+    }
+  }, [selectedStadium]);
+
+  useEffect(() => {
+    if (idStadium) {
+      fetchDataById('services', idStadium).then((respone) => {
+        setListServices(respone.data.result);
+      });
+    }
+  }, [idStadium, isRefresh]);
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -46,11 +70,19 @@ function Service() {
               </div>
             </div>
             <div class="row d-flex flex-nowrap overflow-auto">
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
-              <ServiceItem />
+              {selectedStadium ? (
+                listServices
+                  .filter((s) => s.enable === 'ENABLE')
+                  .map((s, index) => (
+                    <ServiceItem
+                      key={index}
+                      service={s}
+                      setServicesData={setServicesData}
+                    />
+                  ))
+              ) : (
+                <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
+              )}
             </div>
             <div class="row justify-content-center">
               <div class="col-12">
@@ -117,7 +149,6 @@ function Service() {
                     </li>
                   </ul>
                 </div>
-
                 <div class="card">
                   <div class="card-body pt-0">
                     <div class="tab-content">
@@ -279,7 +310,18 @@ function Service() {
           <FooterComponnent />
         </div>
       </div>
-      <FormService />
+      <FormService
+        selectedStadium={selectedStadium}
+        setIsRefresh={setIsRefresh}
+      />
+      <ModalRemoveServices
+        servicesData={servicesData}
+        setIsRefresh={setIsRefresh}
+      />
+      <ModalUpdateServices
+        servicesData={servicesData}
+        setIsRefresh={setIsRefresh}
+      />
     </>
   );
 }

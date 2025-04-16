@@ -7,10 +7,11 @@ import Offcanvas from '../component/Offcanvas';
 import RowOne from '../component/RowOne';
 import InvoiceModal from '../component/InvoiceModal';
 import CancelStadium from '../component/CancelStadium';
+import ModalAddService from '../modal/ModalAddService';
 
 function HistoryBooking() {
   const [sidebarSize, setSidebarSize] = useState('default');
-
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -23,7 +24,11 @@ function HistoryBooking() {
 
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -73,10 +78,10 @@ function HistoryBooking() {
               </div>
             </div>
 
-            <table className="table table-bordered mb-0 table-centered">
+            <table className="table table-bordered mb-0 table-centered text-center">
               <thead>
                 <tr>
-                  <th style={{ width: '35%' }}>Name Stadium</th>
+                  <th style={{ width: '25%' }}>Name Stadium</th>
                   <th style={{ width: '13%' }}>Type</th>
                   <th style={{ width: '13%' }}>Time</th>
                   <th style={{ width: '13%' }}>Day</th>
@@ -101,7 +106,7 @@ function HistoryBooking() {
                         className="dropdown-toggle arrow-none"
                         id="dLabel11"
                         data-bs-toggle="dropdown"
-                        href="#"
+                        href="#a"
                         role="button"
                         aria-haspopup="false"
                         aria-expanded="false"
@@ -112,12 +117,18 @@ function HistoryBooking() {
                         className="dropdown-menu dropdown-menu-end"
                         aria-labelledby="dLabel11"
                       >
-                        <a className="dropdown-item" href="#">
-                          <i className="fas fa-edit me-2 text-primary"></i> Edit
+                        <a
+                          className="dropdown-item"
+                          href="#a"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modaladdservice"
+                        >
+                          <i className="fas fa-edit me-2 text-primary"></i> Add
+                          Services
                         </a>
                         <a
                           className="dropdown-item"
-                          href="#"
+                          href="#a"
                           data-bs-toggle="modal"
                           data-bs-target="#cancelStadium"
                         >
@@ -126,7 +137,7 @@ function HistoryBooking() {
                         </a>
                         <a
                           className="dropdown-item"
-                          href="#"
+                          href="#a"
                           data-bs-toggle="modal"
                           data-bs-target="#invoice"
                         >
@@ -145,7 +156,8 @@ function HistoryBooking() {
         </div>
       </div>
       <InvoiceModal />
-      <CancelStadium/>
+      <CancelStadium />
+      <ModalAddService />
     </>
   );
 }

@@ -8,6 +8,9 @@ import RowOne from '../component/RowOne';
 import Stadium from '../component/Stadium';
 import Add11 from '../component/Add11';
 import EditStadium from '../component/EditStadium';
+import ViewPrice from '../component/ViewPrice';
+import EditPriceField from '../component/EditPriceField';
+import DeleteStadium from '../component/DeleteStadium';
 
 function Stadium11() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -15,6 +18,7 @@ function Stadium11() {
   const [listField, setListField] = useState([]);
   const [stadiumData, setStadiumData] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [isFresh, setIsFresh] = useState(false);
 
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -81,14 +85,14 @@ function Stadium11() {
                         .map((f, index) => (
                           <Stadium
                             key={index}
-                            phoneNumber={selectedStadium.phoneNumber}
-                            address={selectedStadium.address}
+                            selectedStadium={selectedStadium}
                             field={f}
+                            from="stadium11"
                             setStadiumData={setStadiumData}
                           />
                         ))
                     ) : (
-                      <p className="no-data-message">Không có dữ liệu</p> // Hiển thị nếu không chọn sân
+                      <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
                     )}
 
                     {/* Nếu không có stadium nào khớp với tên */}
@@ -98,7 +102,7 @@ function Stadium11() {
                           f.nameStadium?.trim().toLowerCase() ===
                           selectedStadium.name?.trim().toLowerCase()
                       ).length === 0 && (
-                        <p className="no-data-message">Không có dữ liệu</p>
+                        <p className="no-data-message">No data available</p>
                       )}
                   </div>
                 </div>
@@ -114,6 +118,9 @@ function Stadium11() {
         setRefresh={setRefresh}
       />
       <EditStadium stadiumData={stadiumData} setRefresh={setRefresh} />
+      <ViewPrice stadiumData={stadiumData} isFresh={isFresh} />
+      <EditPriceField stadiumData={stadiumData} setIsFresh={setIsFresh} />
+      <DeleteStadium stadiumData={stadiumData} />
     </>
   );
 }

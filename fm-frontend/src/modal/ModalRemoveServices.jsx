@@ -1,26 +1,23 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updateEnableField } from '../API/Api';
 
-function DeleteStadium({ stadiumData, setRefresh }) {
-  const [name, setName] = useState('');
-  const [idField, setIdField] = useState('');
-
+function ModalRemoveServices({ servicesData, setIsRefresh }) {
+  const [idService, setIdService] = useState('');
   useEffect(() => {
-    if (stadiumData) {
-      setIdField(stadiumData.idField || '');
-      setName(stadiumData.name || '');
+    if (servicesData) {
+      setIdService(servicesData.id);
     }
-  }, [stadiumData]);
+  }, [servicesData]);
   const handleRemove = async () => {
     try {
-      await updateEnableField('field', idField);
+      await updateEnableField('services', idService);
       alert('Remove Success');
       document
-        .querySelector('#deleteStadium [data-bs-dismiss="modal"]')
+        .querySelector('#removeservice [data-bs-dismiss="modal"]')
         ?.click();
-      setRefresh((prev) => !prev);
+      setIsRefresh((prev) => !prev);
     } catch (error) {
-      console.error('Lỗi cập nhật:', error);
+      console.error('Error:', error);
       if (
         error.response &&
         error.response.data &&
@@ -33,16 +30,16 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   return (
     <div
       className="modal fade"
-      id="deleteStadium"
+      id="removeservice"
       tabIndex="-1"
-      aria-labelledby="deleteStadiumLabel"
+      aria-labelledby="removeserviceLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="deleteStadiumLabel">
-              Remove Field
+            <h5 className="modal-title" id="removeserviceLabel">
+              Confirm Service Remove
             </h5>
             <button
               type="button"
@@ -52,9 +49,9 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             ></button>
           </div>
           <div className="modal-body">
-            Are you sure you want to delete <span> </span>
+            Are you sure you want to remove{' '}
             <span style={{ color: '#dc3545', fontWeight: 'bold' }}>
-              {name}
+              {servicesData.name}
             </span>{' '}
             ?
           </div>
@@ -69,10 +66,9 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             <button
               type="button"
               className="btn btn-danger"
-              data-bs-dismiss="modal"
               onClick={handleRemove}
             >
-              Delete
+              Remove
             </button>
           </div>
         </div>
@@ -81,4 +77,4 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   );
 }
 
-export default DeleteStadium;
+export default ModalRemoveServices;

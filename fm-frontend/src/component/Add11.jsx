@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { fetchDataByIdTypeAndIdStadium } from '../API/Api';
+import {
+  fetchDataByIdTypeAndIdStadium,
+  fetchDataByIdType11AndIdStadium,
+  postFormData,
+} from '../API/Api';
 
 function Add11({ IdStadium }) {
   const [selectedField11, setSelectedField11] = useState('');
@@ -7,6 +11,7 @@ function Add11({ IdStadium }) {
   const [idStadium, setIdStadium] = useState('');
   const [listField11, setListField11] = useState([]);
   const [listField7, setListField7] = useState([]);
+  const [refresh, setRefesh] = useState(false);
 
   useEffect(() => {
     setIdStadium(IdStadium);
@@ -18,10 +23,23 @@ function Add11({ IdStadium }) {
     setSelectedField7('');
     setSelectedField11('');
   };
+  const handleSubmit = async () => {
+    if (!selectedField11 || !selectedField11) {
+      alert('Fill out information');
+    }
+    const formData = new FormData();
+    formData.append('idField7', selectedField7);
+    formData.append('idField11', selectedField11);
+    try {
+      await postFormData('idfield', formData);
+      alert('Success!');
+      document.querySelector('#add11 [data-bs-dismiss="modal"]')?.click();
+      setRefesh((prev) => !prev);
+    } catch {}
+  };
   useEffect(() => {
     const modal = document.getElementById('add11');
     modal.addEventListener('hidden.bs.modal', handleReset);
-
     return () => {
       modal.removeEventListener('hidden.bs.modal', handleReset);
     };
@@ -38,11 +56,11 @@ function Add11({ IdStadium }) {
           console.log('Error', err);
         });
     }
-  }, [idStadium]);
+  }, [idStadium, refresh]);
 
   useEffect(() => {
     if (idStadium) {
-      fetchDataByIdTypeAndIdStadium('field', 2, idStadium)
+      fetchDataByIdType11AndIdStadium('field', 2, idStadium)
         .then((respone) => {
           if (respone.data.code === 200) {
             setListField11(respone.data.result);
@@ -52,7 +70,7 @@ function Add11({ IdStadium }) {
           console.log('Error', err);
         });
     }
-  }, [idStadium]);
+  }, [idStadium, refresh]);
 
   return (
     <>
@@ -88,13 +106,11 @@ function Add11({ IdStadium }) {
                     onChange={(e) => setSelectedField11(e.target.value)}
                   >
                     <option value="">Select Field 11</option>
-                    {listField11
-                      .filter((item) => item.idField !== selectedField7)
-                      .map((item, index) => (
-                        <option key={index} value={item.idField}>
-                          {item.name}
-                        </option>
-                      ))}
+                    {listField11.map((item, index) => (
+                      <option key={index} value={item.idField}>
+                        {item.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-md-6 mb-2">
@@ -107,19 +123,21 @@ function Add11({ IdStadium }) {
                     onChange={(e) => setSelectedField7(e.target.value)}
                   >
                     <option value="">Select Field 7</option>
-                    {listField7
-                      .filter((item) => item.idField !== selectedField11)
-                      .map((item, index) => (
-                        <option key={index} value={item.idField}>
-                          {item.name}
-                        </option>
-                      ))}
+                    {listField7.map((item, index) => (
+                      <option key={index} value={item.idField}>
+                        {item.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary w-100">
+              <button
+                type="button"
+                className="btn btn-primary w-100"
+                onClick={handleSubmit}
+              >
                 Add Stadium
               </button>
             </div>

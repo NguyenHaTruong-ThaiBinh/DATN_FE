@@ -14,7 +14,7 @@ function EditStadium({ stadiumData, setRefresh }) {
     if (stadiumData) {
       setIdField(stadiumData.idField || '');
       setStatus(stadiumData.status || 'on');
-      setNameType(stadiumData.nameType || '');
+      setNameType(stadiumData.type);
       setImg(stadiumData.img || '');
       setName(stadiumData.name || '');
     }
@@ -23,7 +23,6 @@ function EditStadium({ stadiumData, setRefresh }) {
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
   };
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {

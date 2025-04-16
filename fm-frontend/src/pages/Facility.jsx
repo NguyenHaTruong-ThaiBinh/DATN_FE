@@ -13,6 +13,7 @@ import AddReport from '../component/AddReport';
 
 function Facility() {
   const [sidebarSize, setSidebarSize] = useState('default');
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
 
   // Hàm toggle menu
   const toggleMenu = () => {
@@ -25,7 +26,11 @@ function Facility() {
   }, [sidebarSize]);
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -232,7 +237,7 @@ function Facility() {
       <FacilityModal />
       <CompleteModal />
       <SellOffModal />
-      <AddReport/>
+      <AddReport />
     </>
   );
 }

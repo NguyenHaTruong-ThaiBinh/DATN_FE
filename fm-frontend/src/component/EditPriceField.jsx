@@ -14,6 +14,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
   const [price, setPrice] = useState('');
   const [listPriceField, setListPriceField] = useState([]);
   const [idPrice, setIdPrice] = useState('');
+  const [fresh, setFresh] = useState(false);
   useEffect(() => {
     fetchData('time')
       .then((respone) => {
@@ -41,7 +42,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
           console.error(err);
         });
     }
-  }, [idField]);
+  }, [idField, fresh]);
 
   useEffect(() => {
     if (!selectedTime) {
@@ -74,6 +75,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
       await postFormData('price', formData);
       alert('Success!');
       setIsFresh((prev) => !prev);
+      setFresh((prev) => !prev);
       document
         .querySelector('#editpricefield [data-bs-dismiss="modal"]')
         ?.click();
@@ -88,6 +90,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
       await updateFormData('price', idPrice, formData);
       alert('Update Success');
       setIsFresh((prev) => !prev);
+      setFresh((prev) => !prev);
       document
         .querySelector('#editpricefield [data-bs-dismiss="modal"]')
         ?.click();

@@ -1,24 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { updateEnableField } from '../API/Api';
 
-function DeleteStadium({ stadiumData, setRefresh }) {
-  const [name, setName] = useState('');
-  const [idField, setIdField] = useState('');
-
+function ModalRemoveUser({ user, setIsRefresh }) {
+  const [idUser, setIdUser] = useState('');
   useEffect(() => {
-    if (stadiumData) {
-      setIdField(stadiumData.idField || '');
-      setName(stadiumData.name || '');
+    if (user) {
+      setIdUser(user.id || '');
     }
-  }, [stadiumData]);
+  }, [user]);
   const handleRemove = async () => {
     try {
-      await updateEnableField('field', idField);
+      await updateEnableField('users', idUser);
       alert('Remove Success');
-      document
-        .querySelector('#deleteStadium [data-bs-dismiss="modal"]')
-        ?.click();
-      setRefresh((prev) => !prev);
+      document.querySelector('#removeuser [data-bs-dismiss="modal"]')?.click();
+      setIsRefresh((prev) => !prev);
     } catch (error) {
       console.error('Lỗi cập nhật:', error);
       if (
@@ -33,16 +28,16 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   return (
     <div
       className="modal fade"
-      id="deleteStadium"
+      id="removeuser"
       tabIndex="-1"
-      aria-labelledby="deleteStadiumLabel"
+      aria-labelledby="removeUserLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="deleteStadiumLabel">
-              Remove Field
+            <h5 className="modal-title" id="removeUserLabel">
+              Confirm Remove
             </h5>
             <button
               type="button"
@@ -52,9 +47,9 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             ></button>
           </div>
           <div className="modal-body">
-            Are you sure you want to delete <span> </span>
+            Are you sure you want to remove{' '}
             <span style={{ color: '#dc3545', fontWeight: 'bold' }}>
-              {name}
+              {user.name}
             </span>{' '}
             ?
           </div>
@@ -69,10 +64,9 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             <button
               type="button"
               className="btn btn-danger"
-              data-bs-dismiss="modal"
               onClick={handleRemove}
             >
-              Delete
+              Remove
             </button>
           </div>
         </div>
@@ -81,4 +75,4 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   );
 }
 
-export default DeleteStadium;
+export default ModalRemoveUser;

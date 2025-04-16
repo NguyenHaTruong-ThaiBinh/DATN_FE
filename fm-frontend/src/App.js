@@ -8,7 +8,6 @@ import RowOne from './component/RowOne';
 function App({ component: Component, title }) {
   const [sidebarSize, setSidebarSize] = useState('default');
   const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
-
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));

@@ -24,6 +24,7 @@ import Facility from './pages/Facility';
 import MapGG from './pages/MapGG';
 import WeatherGG from './pages/WeatherGG';
 import Test from './pages/test';
+import PaymentResult from './pages/PaymentResult';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -43,11 +44,12 @@ root.render(
           path="/calendar"
           element={<App component={Canlendar} title="Calendar" />}
         />
+        <Route path="/payment-success" element={<App component={PaymentResult}/>} />
         <Route
           path="/handle"
           element={<App component={Handle} title="Handle" />}
         />
-        <Route path="/test" element={<App component={Test}/>} />
+        <Route path="/test" element={<App component={Test} />} />
         <Route path="/map" element={<App component={MapGG} title="Map" />} />
         <Route
           path="/weather"

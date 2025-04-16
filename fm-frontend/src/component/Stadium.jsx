@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Stadium({ field, phoneNumber, address, setStadiumData }) {
+function Stadium({ field, selectedStadium, setStadiumData, from}) {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+
+  useEffect(() => {
+    if (selectedStadium) {
+      setPhoneNumber(selectedStadium.phoneNumber);
+      setAddress(selectedStadium.address);
+    }
+  },[selectedStadium]);
 
   const handleEditClick = () => {
     setStadiumData({
@@ -11,6 +20,7 @@ function Stadium({ field, phoneNumber, address, setStadiumData }) {
       img: field.img,
       status: field.status,
       name: field.name,
+      type: field.nameType,
     });
   };
   const handlePrice = () => {
@@ -107,7 +117,8 @@ function Stadium({ field, phoneNumber, address, setStadiumData }) {
                       data-bs-target="#editPrice"
                       onClick={handlePrice}
                     >
-                      <i className="fas fa-eye me-2 text-primary"></i> View Price
+                      <i className="fas fa-eye me-2 text-primary"></i> View
+                      Price
                     </a>
                     <a
                       className="dropdown-item"
@@ -154,7 +165,20 @@ function Stadium({ field, phoneNumber, address, setStadiumData }) {
                 <div className="align-self-center">
                   <button
                     className="btn btn-sm btn-primary"
-                    onClick={() => navigate('/form_booking')}
+                    onClick={() =>
+                      navigate('/form_booking', {
+                        state: {
+                          idField: field.idField,
+                          name: field.name,
+                          type: field.nameType,
+                          phoneNumber: selectedStadium.phoneNumber,
+                          nameStadium: selectedStadium.name,
+                          address: selectedStadium.address,
+                          idStadium: selectedStadium.idStadium,
+                          from: from,
+                        },
+                      })
+                    }
                   >
                     Booking Now <i className="fas fa-long-arrow-alt-right"></i>
                   </button>

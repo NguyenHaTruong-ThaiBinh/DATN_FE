@@ -1,5 +1,5 @@
-import React from "react";
-function ServiceItem() {
+import React from 'react';
+function ServiceItem({ service, setServicesData }) {
   return (
     <>
       <div class="col-md-6 col-lg-3">
@@ -16,29 +16,69 @@ function ServiceItem() {
                 <i class="fa-solid fa-ellipsis-vertical"></i>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">
-                  View Detail
+                <a class="dropdown-item" href="#a">
+                  <i class="fa-regular fa-eye me-2"></i> View
                 </a>
-                <a class="dropdown-item" href="#">
-                  Clear All
+                <a
+                  class="dropdown-item"
+                  href="#a"
+                  data-bs-toggle="modal"
+                  data-bs-target="#updateservices"
+                  onClick={() =>
+                    setServicesData({
+                      id: service.idService,
+                      name: service.name,
+                      retailPrice: service.retailPrice,
+                      costPrice: service.costPrice,
+                      quantity: service.quantity,
+                      quantitySold: service.quantitySold,
+                    })
+                  }
+                >
+                  <i class="fa-solid fa-broom me-2"></i> Update
                 </a>
-                <a class="dropdown-item" href="#">
-                  Delete
+                <a
+                  class="dropdown-item"
+                  href="#a"
+                  data-bs-toggle="modal"
+                  data-bs-target="#removeservice"
+                  onClick={() =>
+                    setServicesData({
+                      id: service.idService,
+                      name: service.name,
+                    })
+                  }
+                >
+                  <i class="fa-solid fa-trash-can me-2"></i> Delete
                 </a>
               </div>
             </div>
-            <img
-              src="assets/images/logos/lang-logo/lavie.png"
-              class="me-2 align-self-center thumb-xl"
-              alt="..."
-            />
-            <h5 class="fw-semibold mt-3 fs-14">Water</h5>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img
+                src={service.img}
+                alt="..."
+                style={{
+                  width: '160px',
+                  height: '160px',
+                  objectFit: 'cover',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                }}
+              />
+            </div>
+
+            <h5 class="fw-semibold mt-3 fs-14">{service.name}</h5>
             <div class="d-flex justify-content-between my-2">
               <p class="text-muted mb-0 fs-13 fw-semibold">
-                <span class="text-dark">34 </span>Bin
+                <span class="text-dark">
+                  {service.quantity}&nbsp; {service.unit}
+                </span>
               </p>
               <p class="text-muted mb-0 fs-13 fw-semibold">
-                <span class="text-dark">500 </span>VND/Bin
+                <span className="text-dark">
+                  {Number(service.retailPrice).toLocaleString()}&nbsp;VND/
+                  {service.unit}
+                </span>
               </p>
             </div>
             <div class="d-flex align-items-center">
