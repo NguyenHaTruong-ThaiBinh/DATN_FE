@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { postFormData } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function FormService({ selectedStadium, setIsRefresh }) {
   const [serviceName, setServiceName] = useState('');
@@ -21,7 +22,7 @@ function FormService({ selectedStadium, setIsRefresh }) {
 
   const handleSubmit = async () => {
     if (!serviceName || !costPrice || !retailPrice || !quantity || !unit) {
-      alert('Vui lòng nhập đầy đủ thông tin!');
+      toast.error('Please fill in all information!');
       return;
     }
     const formData = new FormData();
@@ -36,12 +37,12 @@ function FormService({ selectedStadium, setIsRefresh }) {
     }
     try {
       await postFormData('services', formData);
-      alert('Success!');
+      toast.success('Successfull!');
       document.querySelector('#addService [data-bs-dismiss="modal"]')?.click();
       handleReset();
       setIsRefresh((prev) => !prev);
     } catch (error) {
-      alert(`${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     }
   };
   const handleImageChange = (e) => {

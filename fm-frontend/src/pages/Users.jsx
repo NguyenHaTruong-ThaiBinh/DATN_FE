@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import { fetchData } from '../API/Api';
 import ModalRemoveUser from '../component/ModalRemoveUser';
 import ModalUpdateRoleUser from '../component/ModalUpdateRoleUser';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Users() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -33,6 +35,11 @@ function Users() {
   }, [sidebarSize]);
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <HeaderComponnent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}

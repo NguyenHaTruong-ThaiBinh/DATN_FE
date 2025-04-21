@@ -1,4 +1,44 @@
-function InvoiceModal() {
+import React, { useState, useEffect } from 'react';
+import { fetchDataById } from '../API/Api';
+
+function InvoiceModal({ booking, isFresh }) {
+  const [nameStadium, setNameStadium] = useState('');
+  const [nameUser, setNameUser] = useState('');
+  const [phoneNumberUser, setPhoneNumberUser] = useState('');
+  const [phoneNumberStadium, setPhoneNumberStadium] = useState('');
+  const [address, setAddress] = useState('');
+  const [nameField, setNameField] = useState('');
+  const [day, setDay] = useState('');
+  const [time, setTime] = useState('');
+  const [totalPrice, setTotalPrice] = useState('');
+  const [idBooking, setIdBooking] = useState('');
+  const [listServiceOrder, setListServiceOrder] = useState('');
+  useEffect(() => {
+    if (booking) {
+      setNameStadium(booking.nameStadium);
+      setNameUser(booking.nameUser);
+      setPhoneNumberUser(booking.phoneNumberStadium);
+      setPhoneNumberStadium(booking.phoneNumberStadium);
+      setAddress(booking.address);
+      setNameField(booking.nameField);
+      setDay(booking.day);
+      setTime(booking.time);
+      setTotalPrice(booking.totalPrice);
+      setIdBooking(booking.idBooking);
+    }
+  }, [booking]);
+  //lấy serviceOrder theo idBooking
+  useEffect(() => {
+    if (idBooking) {
+      fetchDataById('serviceOrder', idBooking)
+        .then((respone) => {
+          setListServiceOrder(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idBooking, isFresh]);
   return (
     <>
       <div
@@ -37,12 +77,11 @@ function InvoiceModal() {
                         </div>
                         <div class="col-8 text-end align-self-center">
                           <h5 class="mb-1 fw-semibold text-white">
-                            <span class="text-muted">Invoice:</span>{' '}
-                            #BBN2351D458
+                            <span class="text">Stadium: </span>
+                            {nameStadium}
                           </h5>
                           <h5 class="mb-0 fw-semibold text-white">
-                            <span class="text-muted">Issue Date:</span>{' '}
-                            20/07/2024
+                            <span class="text">Since</span> 2003
                           </h5>
                         </div>
                       </div>
@@ -54,8 +93,8 @@ function InvoiceModal() {
                             <span class="badge rounded text-dark bg-light">
                               Invoice to
                             </span>
-                            <h5 class="my-1 fw-semibold fs-18">Ha Truong</h5>
-                            <p class="text-muted ">0393878300</p>
+                            <h5 class="my-1 fw-semibold fs-15">{nameUser}</h5>
+                            <p class="text-muted ">{phoneNumberUser}</p>
                           </div>
                         </div>
                         <div class="col-md-3 d-print-flex align-self-center">
@@ -63,11 +102,10 @@ function InvoiceModal() {
                             <address class="fs-13">
                               <strong class="fs-14">Address</strong>
                               <br />
-                              795 Folsom Ave
+                              {address}
                               <br />
-                              San Francisco, CA 94107
-                              <br />
-                              <abbr title="Phone">P:</abbr> (123) 456-7890
+                              <abbr title="Phone">P:</abbr>
+                              {phoneNumberStadium}
                             </address>
                           </div>
                         </div>
@@ -87,42 +125,67 @@ function InvoiceModal() {
                                 </tr>
                               </thead>
                               <tbody>
+                                {/* Dòng đầu tiên: thông tin sân */}
                                 <tr>
-                                  <td>Field 1</td>
-                                  <td>25/09/2003</td>
-                                  <td>7:00&nbsp;PM </td>
+                                  <td>{nameField}</td>
+                                  <td>{day}</td>
+                                  <td>{time}</td>
                                   <td></td>
                                   <td></td>
-                                  <yd>300.000&nbsp;VND</yd>
+                                  <td>
+                                    {Number(totalPrice).toLocaleString('vi-VN')}{' '}
+                                    VND
+                                  </td>
                                 </tr>
+
+                                {/* Các dòng dịch vụ */}
+                                {Array.isArray(listServiceOrder) &&
+                                  listServiceOrder.map((item, index) => (
+                                    <tr key={item.idServiceOrder}>
+                                      <td>{item.nameService}</td>
+                                      <td></td>
+                                      <td></td>
+                                      <td>{item.quantity}</td>
+                                      <td>
+                                        {Number(
+                                          item.retailPrice
+                                        ).toLocaleString('vi-VN')}
+                                        &nbsp;VND
+                                      </td>
+                                      <td>
+                                        {Number(item.totalPrice).toLocaleString(
+                                          'vi-VN'
+                                        )}
+                                        &nbsp;VND
+                                      </td>
+                                    </tr>
+                                  ))}
+
+                                {/* Dòng Sub Total */}
                                 <tr>
-                                  <td>Water</td>
                                   <td></td>
                                   <td></td>
-                                  <td>2</td>
-                                  <td>20.000&nbsp;VND</td>
-                                  <td>40.000&nbsp;VND</td>
-                                </tr>
-                                <tr>
-                                  <td>Pit</td>
-                                  <td></td>
-                                  <td></td>
-                                  <td>5</td>
-                                  <td>10.000&nbsp;VND</td>
-                                  <td>50.000&nbsp;VND</td>
-                                </tr>
-                                <tr>
-                                  <td></td>
-                                  <td></td>
-                                  <td colspan="1" class="border-0"></td>
+                                  <td colSpan="1" className="border-0"></td>
                                   <td
-                                    colspan="2"
-                                    class="border-0 fs-14 text-dark"
+                                    colSpan="2"
+                                    className="border-0 fs-14 text-dark"
                                   >
                                     <b>Sub Total</b>
                                   </td>
-                                  <td class="border-0 fs-14 text-dark">
-                                    <b>390.000 VND</b>
+                                  <td className="border-0 fs-14 text-dark">
+                                    <b>
+                                      {(
+                                        Number(totalPrice) +
+                                        (Array.isArray(listServiceOrder)
+                                          ? listServiceOrder.reduce(
+                                              (sum, item) =>
+                                                sum + Number(item.totalPrice),
+                                              0
+                                            )
+                                          : 0)
+                                      ).toLocaleString('vi-VN')}{' '}
+                                      VND
+                                    </b>
                                   </td>
                                 </tr>
                               </tbody>

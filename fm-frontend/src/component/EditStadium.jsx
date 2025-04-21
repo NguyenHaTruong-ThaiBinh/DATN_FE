@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
 import { updateFormData } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function EditStadium({ stadiumData, setRefresh }) {
   const [idField, setIdField] = useState('');
@@ -44,17 +44,17 @@ function EditStadium({ stadiumData, setRefresh }) {
     }
     try {
       await updateFormData('field', idField, formData);
-      alert('Update Success');
+      toast.success('Update Success');
       document.querySelector('#editStadium [data-bs-dismiss="modal"]')?.click();
       setRefresh((prev) => !prev);
     } catch (error) {
-      console.error('Lỗi cập nhật:', error);
+      toast.error('Error Update:', error);
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
   };

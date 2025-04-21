@@ -4,6 +4,7 @@ import {
   fetchDataByIdType11AndIdStadium,
   postFormData,
 } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function Add11({ IdStadium }) {
   const [selectedField11, setSelectedField11] = useState('');
@@ -25,17 +26,19 @@ function Add11({ IdStadium }) {
   };
   const handleSubmit = async () => {
     if (!selectedField11 || !selectedField11) {
-      alert('Fill out information');
+      toast.error('Please fill in all information!');
     }
     const formData = new FormData();
     formData.append('idField7', selectedField7);
     formData.append('idField11', selectedField11);
     try {
       await postFormData('idfield', formData);
-      alert('Success!');
+      toast('Successfull!');
       document.querySelector('#add11 [data-bs-dismiss="modal"]')?.click();
       setRefesh((prev) => !prev);
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
   };
   useEffect(() => {
     const modal = document.getElementById('add11');
@@ -105,7 +108,7 @@ function Add11({ IdStadium }) {
                     value={selectedField11}
                     onChange={(e) => setSelectedField11(e.target.value)}
                   >
-                    <option value="">Select Field 11</option>
+                    <option value="">...</option>
                     {listField11.map((item, index) => (
                       <option key={index} value={item.idField}>
                         {item.name}
@@ -122,7 +125,7 @@ function Add11({ IdStadium }) {
                     value={selectedField7}
                     onChange={(e) => setSelectedField7(e.target.value)}
                   >
-                    <option value="">Select Field 7</option>
+                    <option value="">...</option>
                     {listField7.map((item, index) => (
                       <option key={index} value={item.idField}>
                         {item.name}

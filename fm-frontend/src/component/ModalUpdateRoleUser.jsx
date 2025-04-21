@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { updateRoleUser } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function ModalUpdateRoleUser({ user, setIsRefresh }) {
   const [idUser, setIdUser] = useState('');
   const handleSaveRole = async () => {
     try {
       await updateRoleUser('users', idUser);
-      alert('Update role Success');
+      toast.success('Update role Successfull');
       document.querySelector('#updaterole [data-bs-dismiss="modal"]')?.click();
       setIsRefresh((prev) => !prev);
     } catch (error) {
@@ -16,7 +17,7 @@ function ModalUpdateRoleUser({ user, setIsRefresh }) {
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
   };

@@ -7,17 +7,47 @@ import RowOne from '../component/RowOne';
 import { useState, useEffect } from 'react';
 import FormService from '../component/FormService';
 import ServiceItem from '../component/ServiceItem';
-import { fetchDataById } from '../API/Api';
+import {
+  fetchData,
+  fetchDataById,
+  fetchDataByIdStadiumAndIdTypeAndEnable,
+  fetchDataByIdTypeAndIdStadium,
+} from '../API/Api';
 import ModalRemoveServices from '../modal/ModalRemoveServices';
 import ModalUpdateServices from '../modal/ModalUpdateServices';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ModalDeleteServiceOrder from '../modal/ModalDeleteServiceOrder';
+import ModalEditServiceOrder from '../modal/ModalEditServiceOrder';
 
 function Service() {
   const [sidebarSize, setSidebarSize] = useState('default');
   const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
   const [idStadium, setIdStadium] = useState('');
   const [listServices, setListServices] = useState([]);
+  const [listTime, setListTime] = useState([]);
+  const [selectedTime, setSelectedTime] = useState('');
+  const [listServiceOrder, setListServiceOrder] = useState([]);
   const [servicesData, setServicesData] = useState('');
   const [isRefresh, setIsRefresh] = useState(false);
+  const [selectedType, setSelectedType] = useState('');
+  const [listType, setListType] = useState([]);
+  const [listField, setListField] = useState([]);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedField, setSelectedField] = useState('');
+  const [listServiceOrder2, setListServiceOrder2] = useState([]);
+  const [selectedServiceOrder, setSelectedServiceOrder] = useState(null);
+
+  // lấy timetime
+  useEffect(() => {
+    fetchData('time')
+      .then((respone) => {
+        setListTime(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -32,7 +62,29 @@ function Service() {
       setIdStadium(selectedStadium.idStadium);
     }
   }, [selectedStadium]);
-
+  //lấy field ra theo idStadium và idType
+  useEffect(() => {
+    if (idStadium && selectedType) {
+      fetchDataByIdStadiumAndIdTypeAndEnable('field', idStadium, selectedType)
+        .then((respone) => {
+          setListField(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idStadium, selectedType]);
+  //lấy Type ra
+  useEffect(() => {
+    fetchData('type')
+      .then((respone) => {
+        setListType(respone.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  //lấy service theo idStadium
   useEffect(() => {
     if (idStadium) {
       fetchDataById('services', idStadium).then((respone) => {
@@ -40,8 +92,58 @@ function Service() {
       });
     }
   }, [idStadium, isRefresh]);
+
+  //lấy serviceOrder theo idStadium và idType 7v7
+  useEffect(() => {
+    if (idStadium) {
+      fetchDataByIdTypeAndIdStadium('serviceOrder', 1, idStadium)
+        .then((respone) => {
+          setListServiceOrder(respone.data.result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [idStadium, isRefresh]);
+
+  //lấy serviceOder theo idStadium và idType 11v11
+  useEffect(() => {
+    if (idStadium) {
+      fetchDataByIdTypeAndIdStadium('serviceOrder', 2, idStadium)
+        .then((respone) => {
+          setListServiceOrder2(respone.data.result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [idStadium, isRefresh]);
+  //lọc serviceOrder của sân 7 theo các điều kiện
+  const filteredServiceOder = listServiceOrder.filter((serviceOrder) => {
+    const matchTime = selectedTime ? serviceOrder.time === selectedTime : true;
+    const matchDate = selectedDate ? serviceOrder.day === selectedDate : true;
+    const matchField = selectedField
+      ? serviceOrder.nameField === selectedField
+      : true;
+    return matchDate && matchTime && matchField;
+  });
+
+  //lọc serviceOrder của sân 11 theo các điều kiện
+  const filteredServiceOder2 = listServiceOrder2.filter((serviceOrder) => {
+    const matchTime = selectedTime ? serviceOrder.time === selectedTime : true;
+    const matchDate = selectedDate ? serviceOrder.day === selectedDate : true;
+    const matchField = selectedField
+      ? serviceOrder.nameField === selectedField
+      : true;
+    return matchDate && matchTime && matchField;
+  });
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <HeaderComponnent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}
@@ -88,35 +190,49 @@ function Service() {
               <div class="col-12">
                 <div class="clearfix">
                   <div class="btn-group float-end ms-2">
-                    <button
-                      type="button"
-                      class="btn btn-secondary me-0 overflow-hidden"
+                    <input
+                      className="form-control form-control-sm"
+                      type="date"
+                      id="date-input"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                    />
+                    <select
+                      className="form-select form-select-sm"
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
                     >
-                      Upload File
-                      <input
-                        type="file"
-                        name="file"
-                        class="overflow-hidden position-absolute top-0 start-0 opacity-0"
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
+                      <option value="">Time</option>
+                      {listTime.map((item, index) => (
+                        <option key={item.idTime} value={item.time}>
+                          {item.time}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      className="form-select form-select-sm"
+                      value={selectedField}
+                      onChange={(e) => setSelectedField(e.target.value)}
                     >
-                      <i class="las la-angle-down"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">
-                        <i class="las la-file-upload fs-16 me-1 align-text-bottom"></i>{' '}
-                        Upload File
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        <i class="las la-cloud-upload-alt fs-16 me-1 align-text-bottom"></i>
-                        Upload Folder
-                      </a>
-                    </div>
+                      <option value="">Field</option>
+                      {listField.map((item, index) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      className="form-select form-select-sm"
+                      value={selectedType}
+                      onChange={(e) => setSelectedType(e.target.value)}
+                    >
+                      <option value="">Type</option>
+                      {listType.map((item, index) => (
+                        <option key={index} value={item.idType}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <ul class="nav nav-tabs my-4" role="tablist">
                     <li class="nav-item">
@@ -128,9 +244,6 @@ function Service() {
                         aria-selected="true"
                       >
                         <i class="fa-solid fa-futbol me-1"></i> 7vs7{' '}
-                        <span class="badge rounded text-blue bg-blue-subtle ms-1">
-                          32
-                        </span>
                       </a>
                     </li>
                     <li class="nav-item">
@@ -142,9 +255,6 @@ function Service() {
                         aria-selected="false"
                       >
                         <i class="fa-solid fa-futbol me-11"></i> 11vs11{' '}
-                        <span class="badge rounded text-blue bg-blue-subtle ms-1">
-                          85
-                        </span>
                       </a>
                     </li>
                   </ul>
@@ -159,143 +269,130 @@ function Service() {
                       >
                         <div class="table-responsive browser_users">
                           <table class="table mb-0">
-                            <thead class="table-light">
+                            <thead class="table-light text-center">
                               <tr>
-                                <th class="border-top-0">Name Stadium</th>
-                                <th class="border-top-0 text-end">
-                                  Name Service
-                                </th>
-                                <th class="border-top-0 text-end">Quantity</th>
-                                <th class="border-top-0 text-end">
-                                  Total Price
-                                </th>
-                                <th class="border-top-0 text-end">Action</th>
+                                <th class="border-top-0 ">Field</th>
+                                <th class="border-top-0 ">Service</th>
+                                <th class="border-top-0 ">Quantity</th>
+                                <th class="border-top-0 ">Time</th>
+                                <th class="border-top-0 ">Day</th>
+                                <th class="border-top-0 ">Total Price</th>
+                                <th class="border-top-0 ">Action</th>
                               </tr>
                             </thead>
-                            <tbody>
-                              <tr>
-                                <td>Stadium 7</td>
-                                <td class="text-end">Water</td>
-                                <td class="text-end">5</td>
-                                <td class="text-end">500.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stadium 7</td>
-                                <td class="text-end">Pit Shirt</td>
-                                <td class="text-end">5</td>
-                                <td class="text-end">20.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stadium 7</td>
-                                <td class="text-end">Shoe Thuong Dinh</td>
-                                <td class="text-end">2</td>
-                                <td class="text-end">100.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
+                            <tbody class="text-center">
+                              {filteredServiceOder.map(
+                                (serviceOrder, index) => (
+                                  <tr key={index}>
+                                    <td>{serviceOrder.nameField}</td>
+                                    <td>{serviceOrder.nameService}</td>
+                                    <td>{serviceOrder.quantity}</td>
+                                    <td>{serviceOrder.time}</td>
+                                    <td>{serviceOrder.day}</td>
+                                    <td>
+                                      {Number(
+                                        serviceOrder.totalPrice
+                                      ).toLocaleString()}
+                                      &nbsp;VND
+                                    </td>
+                                    <td>
+                                      <a href="#">
+                                        <i class="las la-download text-secondary fs-18"></i>
+                                      </a>
+                                      <a href="#">
+                                        <i
+                                          class="las la-pen text-secondary fs-18"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#editserviceorder"
+                                          onClick={() => {
+                                            setSelectedServiceOrder(
+                                              serviceOrder
+                                            );
+                                          }}
+                                        ></i>
+                                      </a>
+                                      <a href="#">
+                                        <i
+                                          class="las la-trash-alt text-secondary fs-18"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#deleteservice"
+                                          onClick={() => {
+                                            setSelectedServiceOrder(
+                                              serviceOrder
+                                            );
+                                          }}
+                                        ></i>
+                                      </a>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
                             </tbody>
                           </table>
                         </div>
                       </div>
+
                       <div class="tab-pane" id="images" role="tabpanel">
                         <div class="table-responsive">
                           <table class="table mb-0">
-                            <thead class="table-light">
+                            <thead class="table-light text-center">
                               <tr>
-                                <th class="border-top-0">Name Stadium</th>
-                                <th class="border-top-0 text-end">
-                                  Name Service
-                                </th>
-                                <th class="border-top-0 text-end">Quantity</th>
-                                <th class="border-top-0 text-end">
-                                  Total Price
-                                </th>
-                                <th class="border-top-0 text-end">Action</th>
+                                <th class="border-top-0">Field</th>
+                                <th class="border-top-0 ">Service</th>
+                                <th class="border-top-0 ">Quantity</th>
+                                <th class="border-top-0 ">Time</th>
+                                <th class="border-top-0 ">Day</th>
+                                <th class="border-top-0 ">Total Price</th>
+                                <th class="border-top-0 ">Action</th>
                               </tr>
                             </thead>
-                            <tbody>
-                              <tr>
-                                <td>Stadium 11</td>
-                                <td class="text-end">Water</td>
-                                <td class="text-end">5</td>
-                                <td class="text-end">500.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stadium 11</td>
-                                <td class="text-end">Pit Shirt</td>
-                                <td class="text-end">5</td>
-                                <td class="text-end">20.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>Stadium 11</td>
-                                <td class="text-end">Shoe Thuong Dinh</td>
-                                <td class="text-end">2</td>
-                                <td class="text-end">100.000 VND</td>
-                                <td class="text-end">
-                                  <a href="#">
-                                    <i class="las la-download text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-pen text-secondary fs-18"></i>
-                                  </a>
-                                  <a href="#">
-                                    <i class="las la-trash-alt text-secondary fs-18"></i>
-                                  </a>
-                                </td>
-                              </tr>
+                            <tbody class="text-center">
+                              {filteredServiceOder2.map(
+                                (serviceOrder, index) => (
+                                  <tr key={index}>
+                                    <td>{serviceOrder.nameField}</td>
+                                    <td>{serviceOrder.nameService}</td>
+                                    <td>{serviceOrder.quantity}</td>
+                                    <td>{serviceOrder.time}</td>
+                                    <td>{serviceOrder.day}</td>
+                                    <td>
+                                      {Number(
+                                        serviceOrder.totalPrice
+                                      ).toLocaleString()}
+                                      &nbsp;VND
+                                    </td>
+                                    <td>
+                                      <a href="#">
+                                        <i class="las la-download text-secondary fs-18"></i>
+                                      </a>
+                                      <a href="#">
+                                        <i
+                                          class="las la-pen text-secondary fs-18"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#editserviceorder"
+                                          onClick={() => {
+                                            setSelectedServiceOrder(
+                                              serviceOrder
+                                            );
+                                          }}
+                                        ></i>
+                                      </a>
+                                      <a href="#">
+                                        <i
+                                          class="las la-trash-alt text-secondary fs-18"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#deleteservice"
+                                          onClick={() => {
+                                            setSelectedServiceOrder(
+                                              serviceOrder
+                                            );
+                                          }}
+                                        ></i>
+                                      </a>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
                             </tbody>
                           </table>
                         </div>
@@ -322,6 +419,11 @@ function Service() {
         servicesData={servicesData}
         setIsRefresh={setIsRefresh}
       />
+      <ModalDeleteServiceOrder
+        selectedServiceOrder={selectedServiceOrder}
+        setIsRefresh={setIsRefresh}
+      />
+      <ModalEditServiceOrder selectedServiceOrder={selectedServiceOrder} />
     </>
   );
 }

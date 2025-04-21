@@ -13,12 +13,15 @@ function PaymentSuccess() {
 
     postPayFromData('booking', queryObject)
       .then((res) => {
-        setIsSuccess(true);
-        console.log('Xác nhận từ server:', res.data);
+        if (res.data.result.paymentStatus === 'PAID') {
+          setIsSuccess(true);
+        } else {
+          setIsSuccess(false);
+        }
       })
       .catch((err) => {
         setIsSuccess(false);
-        console.error('Lỗi xác nhận:', err);
+        console.error('Error:', err);
       });
   }, [location.search]);
 

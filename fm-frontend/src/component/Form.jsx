@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { toast } from 'react-toastify';
 import { fetchData, postFormData } from '../API/Api';
 
 function Form({ stadiumName, setRefresh }) {
@@ -17,7 +17,7 @@ function Form({ stadiumName, setRefresh }) {
 
   const handleSubmit = async () => {
     if (!nameField || !nameStadium || !type) {
-      alert('Vui lòng nhập đầy đủ thông tin!');
+      toast.error('Please enter complete information!');
       return;
     }
 
@@ -31,12 +31,12 @@ function Form({ stadiumName, setRefresh }) {
 
     try {
       await postFormData('field', formData);
-      alert('Thêm thành công!');
+      toast.success('Add Successful!');
       handleReset();
       document.querySelector('#addUser [data-bs-dismiss="modal"]')?.click();
       setRefresh((prev) => !prev);
     } catch (error) {
-      alert(`${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     }
   };
 
@@ -51,11 +51,6 @@ function Form({ stadiumName, setRefresh }) {
         console.log('Error', err);
       });
   }, []);
-
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
-  };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -185,28 +180,6 @@ function Form({ stadiumName, setRefresh }) {
                   </select>
                 </div>
               </div>
-
-              {/* Status */}
-              <div className="mb-2">
-                <label htmlFor="status">Status</label>
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i
-                      className={`fas fa-toggle-${
-                        status === 'on' ? 'on text-success' : 'off text-muted'
-                      }`}
-                    ></i>
-                  </span>
-                  <select
-                    className="form-control"
-                    value={status}
-                    onChange={handleStatusChange}
-                  >
-                    <option value="on">On</option>
-                    <option value="off">Off</option>
-                  </select>
-                </div>
-              </div>
             </div>
             <div className="modal-footer">
               <button
@@ -214,7 +187,7 @@ function Form({ stadiumName, setRefresh }) {
                 className="btn btn-primary w-100"
                 onClick={handleSubmit}
               >
-                Add Stadium
+                Add Field
               </button>
             </div>
           </div>

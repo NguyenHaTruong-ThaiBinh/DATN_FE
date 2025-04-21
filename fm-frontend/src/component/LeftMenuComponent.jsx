@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const LeftMenuComponent = () => {
   const location = useLocation(); // Lấy đường dẫn hiện tại
+  const navigate = useNavigate();
+
   const [activeMenu, setActiveMenu] = useState(location.pathname);
 
   // Khi đường dẫn thay đổi, cập nhật activeMenu
@@ -14,7 +16,7 @@ const LeftMenuComponent = () => {
     <>
       <div className="startbar d-print-none">
         <div className="brand">
-          <a href="/" className="logo">
+          <div className="logo" onClick={() => navigate('/')}>
             <span>
               <img
                 src="assets/images/logo1.png"
@@ -34,7 +36,7 @@ const LeftMenuComponent = () => {
                 className="logo-lg logo-dark"
               />
             </span>
-          </a>
+          </div>
         </div>
         <div className="startbar-menu">
           <div
@@ -52,13 +54,13 @@ const LeftMenuComponent = () => {
                 <li
                   className={`nav-item ${activeMenu === '/' ? 'active' : ''}`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${activeMenu === '/' ? 'active' : ''}`}
-                    href="/"
+                    onClick={() => navigate('/')}
                   >
                     <i className="iconoir-home menu-icon"></i>
                     <span>Home</span>
-                  </a>
+                  </div>
                 </li>
 
                 {/* Booking */}
@@ -84,26 +86,26 @@ const LeftMenuComponent = () => {
                   >
                     <ul className="nav flex-column">
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/stadium5' ? 'active' : ''
                           }`}
-                          href="/stadium5"
+                          onClick={() => navigate('/stadium5')}
                         >
                           <i className="iconoir-football menu-icon"></i>
                           <span>7v7</span>
-                        </a>
+                        </div>
                       </li>
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/stadium11' ? 'active' : ''
                           }`}
-                          href="/stadium11"
+                          onClick={() => navigate('/stadium11')}
                         >
                           <i className="iconoir-football menu-icon"></i>
                           <span>11v11</span>
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </div>
@@ -114,15 +116,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/history_booking' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/history_booking' ? 'active' : ''
                     }`}
-                    href="/history_booking"
+                    onClick={() => navigate('/history_booking')}
                   >
                     <i className="iconoir-plug-type-l menu-icon"></i>
                     <span>Booking Status</span>
-                  </a>
+                  </div>
                 </li>
                 {/* Service */}
                 <li
@@ -130,15 +132,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/service' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/service' ? 'active' : ''
                     }`}
-                    href="/service"
+                    onClick={() => navigate('/service')}
                   >
                     <i className="iconoir-credit-cards menu-icon"></i>
                     <span>Service</span>
-                  </a>
+                  </div>
                 </li>
                 {/* users */}
                 <li
@@ -146,15 +148,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/users' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/users' ? 'active' : ''
                     }`}
-                    href="/users"
+                    onClick={() => navigate('/users')}
                   >
                     <i className="iconoir-group menu-icon"></i>
                     <span>Users</span>
-                  </a>
+                  </div>
                 </li>
                 {/* Calendar */}
                 <li
@@ -162,15 +164,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/calendar' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/calendar' ? 'active' : ''
                     }`}
-                    href="/calendar"
+                    onClick={() => navigate('/calendar')}
                   >
                     <i className="iconoir-calendar menu-icon"></i>
                     <span>Calendar</span>
-                  </a>
+                  </div>
                 </li>
                 {/* Facility */}
                 <li
@@ -178,15 +180,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/facility' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/facility' ? 'active' : ''
                     }`}
-                    href="/facility"
+                    onClick={() => navigate('/facility')}
                   >
                     <i className="iconoir-paste-clipboard menu-icon"></i>
                     <span>Facility</span>
-                  </a>
+                  </div>
                 </li>
                 <li className="menu-label mt-2">
                   <span>Feature</span>
@@ -226,37 +228,37 @@ const LeftMenuComponent = () => {
                   >
                     <ul className="nav flex-column">
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/matching' ? 'active' : ''
                           }`}
-                          href="/matching"
+                          onClick={() => navigate('/matching')}
                         >
                           <i className="iconoir-community menu-icon"></i>
                           <span>Matching</span>
-                        </a>
+                        </div>
                       </li>
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/handle' ? 'active' : ''
                           }`}
-                          href="/handle"
+                          onClick={() => navigate('/handle')}
                         >
                           <i className="fas fa-wrench menu-icon"></i>
                           <span>Handle</span>
-                        </a>
+                        </div>
                       </li>
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/match' ? 'active' : ''
                           }`}
-                          href="/match"
+                          onClick={() => navigate('/match')}
                         >
                           <i className="fas fa-handshake menu-icon"></i>
                           <span>Match</span>
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </div>
@@ -267,15 +269,15 @@ const LeftMenuComponent = () => {
                     activeMenu === '/chat' ? 'active' : ''
                   }`}
                 >
-                  <a
+                  <div
                     className={`nav-link ${
                       activeMenu === '/chat' ? 'active' : ''
                     }`}
-                    href="/chat"
+                    onClick={() => navigate('/chat')}
                   >
                     <i className="iconoir-chat-bubble menu-icon"></i>
                     <span>Chat</span>
-                  </a>
+                  </div>
                 </li>
                 {/* map */}
                 <li className="nav-item">
@@ -306,26 +308,26 @@ const LeftMenuComponent = () => {
                   >
                     <ul className="nav flex-column">
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/map' ? 'active' : ''
                           }`}
-                          href="/map"
+                          onClick={() => navigate('/map')}
                         >
                           <i className="fas fa-map-marker-alt menu-icon"></i>
                           <span>Map</span>
-                        </a>
+                        </div>
                       </li>
                       <li className="nav-item">
-                        <a
+                        <div
                           className={`nav-link ${
                             activeMenu === '/weather' ? 'active' : ''
                           }`}
-                          href="/weather"
+                          onClick={() => navigate('/weather')}
                         >
                           <i className="fas fa-cloud-sun menu-icon"></i>
                           <span>Weather</span>
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </div>

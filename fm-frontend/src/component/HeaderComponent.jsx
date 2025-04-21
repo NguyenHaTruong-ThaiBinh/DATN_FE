@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchData } from '../API/Api';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderComponent = ({
   onToggleMenu,
@@ -7,6 +8,8 @@ const HeaderComponent = ({
   setSelectedStadium,
 }) => {
   const [stadiums, setStadiums] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchData('stadium')
       .then((response) => {
@@ -45,10 +48,9 @@ const HeaderComponent = ({
           </ul>
           <ul className="topbar-item list-unstyled d-inline-flex align-items-center mb-0">
             <li className="dropdown">
-              <a
+              <div
                 className="nav-link dropdown-toggle arrow-none nav-icon"
                 data-bs-toggle="dropdown"
-                href="/"
                 role="button"
                 aria-haspopup="false"
                 aria-expanded="false"
@@ -61,13 +63,12 @@ const HeaderComponent = ({
                     className="thumb-sm rounded-circle"
                   />
                 )}
-              </a>
+              </div>
               <div className="dropdown-menu">
                 {stadiums.map((stadium, index) => (
-                  <a
+                  <div
                     key={index}
                     className="dropdown-item"
-                    href="/"
                     onClick={(e) => {
                       e.preventDefault();
                       handleStadiumChange(stadium);
@@ -80,16 +81,15 @@ const HeaderComponent = ({
                       className="me-2"
                     />
                     {stadium.name}
-                  </a>
+                  </div>
                 ))}
               </div>
             </li>
 
             <li class="dropdown topbar-item">
-              <a
+              <div
                 class="nav-link dropdown-toggle arrow-none nav-icon"
                 data-bs-toggle="dropdown"
-                href="/"
                 role="button"
                 aria-haspopup="false"
                 aria-expanded="false"
@@ -97,7 +97,7 @@ const HeaderComponent = ({
               >
                 <i class="iconoir-bell"></i>
                 <span class="alert-badge"></span>
-              </a>
+              </div>
               <div class="dropdown-menu stop dropdown-menu-end dropdown-lg py-0">
                 <h5 class="dropdown-item-text m-0 py-3 d-flex justify-content-between align-items-center">
                   Notifications{' '}

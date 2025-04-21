@@ -5,6 +5,9 @@ import FooterComponent from './component/FooterComponent';
 import Offcanvas from './component/Offcanvas';
 import RowOne from './component/RowOne';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App({ component: Component, title }) {
   const [sidebarSize, setSidebarSize] = useState('default');
   const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
@@ -20,6 +23,11 @@ function App({ component: Component, title }) {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <HeaderComponent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}

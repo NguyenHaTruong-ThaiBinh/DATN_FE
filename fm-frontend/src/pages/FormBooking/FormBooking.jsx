@@ -1,8 +1,7 @@
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  fetchData,
   fetchDataById,
   fetchDataByIdFieldAndDay,
   postFormData,
@@ -14,7 +13,7 @@ function FormBooking() {
   const navigate = useNavigate();
   const from = location.state?.from || '/';
   const [date, setDate] = useState('');
-  const { name, type, idField, phoneNumber, address, nameStadium, idStadium } =
+  const { name, type, idField, phoneNumber, address, nameStadium } =
     state || {};
   const [listTime, setListTime] = useState([]);
   const [listPriceField, setListPriceField] = useState([]);
@@ -30,7 +29,7 @@ function FormBooking() {
 
   const handlePay = async () => {
     if (!idUser || !idPrice || !date) {
-      alert('Vui lòng nhập đầy đủ thông tin!');
+      alert('Please enter complete information!');
       return;
     }
     const formData = new FormData();
@@ -248,11 +247,12 @@ function FormBooking() {
                 </div>
               </div>
               <hr />
-              <div class="row d-flex justify-content-center">
-                <div class="col-lg-12 col-xl-4 ms-auto align-self-center">
-                  <div class="text-center">
+              <div className="row">
+                {/* Price ở góc trái */}
+                <div className="col-lg-12 col-xl-4 align-self-center">
+                  <div className="text-start">
                     <div className="mb-3 row">
-                      <label className="col-sm-2 col-form-label text-end fw-bold text-primary fs-5">
+                      <label className="col-sm-2 col-form-label fw-bold text-primary fs-5">
                         Price
                       </label>
                       <div className="col-sm-10">
@@ -266,18 +266,24 @@ function FormBooking() {
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-12 col-xl-4">
-                  <div class="float-end d-print-none mt-2 mt-md-0">
-                    <a
-                      href="#a"
-                      class="btn btn-primary me-2"
+
+                {/* Các nút ở bên phải */}
+                <div className="col-lg-12 col-xl-4 ms-auto">
+                  <div className="float-end d-print-none mt-2 mt-md-0">
+                    <button
+                      type="button"
+                      className="btn btn-primary me-2"
                       onClick={handlePay}
                     >
                       Submit
-                    </a>
-                    <a href="#" class="btn btn-danger" onClick={handleBack}>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={handleBack}
+                    >
                       Cancel
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

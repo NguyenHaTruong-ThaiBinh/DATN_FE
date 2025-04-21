@@ -69,3 +69,33 @@ export const updateRoleUser = (endpoint, id) => {
 export const fetchDataByIdFieldAndDay = (endpoint, idField, day) => {
   return axios.get(`${API_BASE_URL}/${endpoint}/${idField}/${day}`);
 };
+
+//getFieldByIdStadiumAndIdTypeAndEnable
+export const fetchDataByIdStadiumAndIdTypeAndEnable = (
+  endpoint,
+  idStadium,
+  idType
+) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/${idType}/enable`);
+};
+
+//deleteServiceOrderByIdSerViceOrder
+export const deleteServiceOrderByIdServiceOrder = (
+  endpoint,
+  idServiceOrder
+) => {
+  return axios.delete(`${API_BASE_URL}/${endpoint}/${idServiceOrder}`);
+};
+
+//getServiceByIdService
+export const getServiceByIdService = (endpoint, idService) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idService}/Service`);
+};
+
+//updateServiceOrderByIdServiceOrder
+export const updateServiceOrderByIdServiceOrder = (
+  endpoint,
+  idServiceOrder
+) => {
+  return axios.put(`${API_BASE_URL}/${endpoint}/${idServiceOrder}`);
+};

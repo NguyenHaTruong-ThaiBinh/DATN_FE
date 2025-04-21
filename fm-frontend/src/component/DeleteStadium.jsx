@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { updateEnableField } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function DeleteStadium({ stadiumData, setRefresh }) {
   const [name, setName] = useState('');
@@ -14,19 +15,19 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   const handleRemove = async () => {
     try {
       await updateEnableField('field', idField);
-      alert('Remove Success');
+      toast.success('Remove Success');
       document
         .querySelector('#deleteStadium [data-bs-dismiss="modal"]')
         ?.click();
       setRefresh((prev) => !prev);
     } catch (error) {
-      console.error('Lỗi cập nhật:', error);
+      toast.error('Error:', error);
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
   };

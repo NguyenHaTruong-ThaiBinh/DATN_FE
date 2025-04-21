@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { updateFormData } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function ModalUpdateServices({ servicesData, setIsRefresh }) {
   const [idService, setIdService] = useState('');
@@ -28,19 +29,19 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
     formData.append('costPrice', costPrice);
     try {
       await updateFormData('services', idService, formData);
-      alert('Update Success');
+      toast.success('Update Successfull');
       document
         .querySelector('#updateservices [data-bs-dismiss="modal"]')
         ?.click();
       setIsRefresh((prev) => !prev);
     } catch (error) {
-      alert('Lỗi cập nhật', error);
+      toast.error('Error: ', error);
       if (
         error.response &&
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
   };

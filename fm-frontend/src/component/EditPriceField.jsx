@@ -5,6 +5,7 @@ import {
   postFormData,
   updateFormData,
 } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function EditPriceField({ stadiumData, setIsFresh }) {
   const [name, setName] = useState('');
@@ -64,7 +65,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
   }, [selectedTime, listPriceField]);
   const handleSavePrice = async () => {
     if (!selectedTime || !price) {
-      alert('Fill all information');
+      toast.success('Please enter complete information!');
       return;
     }
     const formData = new FormData();
@@ -73,29 +74,29 @@ function EditPriceField({ stadiumData, setIsFresh }) {
     formData.append('price', price);
     try {
       await postFormData('price', formData);
-      alert('Success!');
+      toast.success('Successfull!');
       setIsFresh((prev) => !prev);
       setFresh((prev) => !prev);
       document
         .querySelector('#editpricefield [data-bs-dismiss="modal"]')
         ?.click();
     } catch (error) {
-      alert(`${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     }
   };
   const handleUpdatePrice = async () => {
-    const formData = new FormData();
+    const formData = new FormData();  
     formData.append('price', price);
     try {
       await updateFormData('price', idPrice, formData);
-      alert('Update Success');
+      toast.success('Update Success');
       setIsFresh((prev) => !prev);
       setFresh((prev) => !prev);
       document
         .querySelector('#editpricefield [data-bs-dismiss="modal"]')
         ?.click();
     } catch (error) {
-      alert(error.response?.data?.message || 'Update thất bại!');
+      toast.error(error.response?.data?.message || 'Update thất bại!');
     }
   };
   return (

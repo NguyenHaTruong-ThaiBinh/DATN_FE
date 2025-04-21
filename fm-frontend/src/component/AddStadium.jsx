@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { postFormData } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function AddStadium() {
   const [image, setImage] = useState(null);
@@ -26,7 +27,7 @@ function AddStadium() {
 
   const handleSubmit = async () => {
     if (!name || !address || !phoneNumber) {
-      alert('Vui lòng nhập đầy đủ thông tin!');
+      toast.error('Please enter complete information!');
       return;
     }
 
@@ -39,11 +40,12 @@ function AddStadium() {
     }
 
     try {
-      await postFormData('stadium', formData)
-      alert('Thêm sân vận động thành công!');
+      await postFormData('stadium', formData);
+      toast.success('Add Stadium Successfull!');
+      document.querySelector('#addstadium [data-bs-dismiss="modal"]')?.click();
       resetForm();
     } catch (error) {
-      alert(`${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     }
   };
 

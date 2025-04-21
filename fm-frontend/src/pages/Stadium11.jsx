@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchData } from '../API/Api';
+import {fetchDataByIdStadiumAndIdTypeAndEnable } from '../API/Api';
 import HeaderComponnent from '../component/HeaderComponent';
 import LeftMenuComponnent from '../component/LeftMenuComponent';
 import FooterComponnent from '../component/FooterComponent';
@@ -11,6 +11,8 @@ import EditStadium from '../component/EditStadium';
 import ViewPrice from '../component/ViewPrice';
 import EditPriceField from '../component/EditPriceField';
 import DeleteStadium from '../component/DeleteStadium';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Stadium11() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -25,21 +27,35 @@ function Stadium11() {
   };
 
   useEffect(() => {
-    fetchData('field')
-      .then((respone) => {
-        setListField(respone.data.result);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [refresh]);
+    if (selectedStadium) {
+      const idStadium = selectedStadium.idStadium;
+      fetchDataByIdStadiumAndIdTypeAndEnable('field', idStadium, 2)
+        .then((respone) => {
+          setListField(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [selectedStadium, refresh]);
 
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
 
+  useEffect(() => {
+    if (selectedStadium) {
+      console.log('DS', listField);
+    }
+  }, [selectedStadium, listField]);
+
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <HeaderComponnent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}
@@ -74,36 +90,18 @@ function Stadium11() {
                   </div>
                   <div className="row justify-content-center">
                     {selectedStadium ? (
-                      listField
-                        .filter(
-                          (f) =>
-                            f.nameStadium?.trim().toLowerCase() ===
-                              selectedStadium.name?.trim().toLowerCase() &&
-                            f.nameType === '11' &&
-                            f.enable === 'ENABLE'
-                        )
-                        .map((f, index) => (
-                          <Stadium
-                            key={index}
-                            selectedStadium={selectedStadium}
-                            field={f}
-                            from="stadium11"
-                            setStadiumData={setStadiumData}
-                          />
-                        ))
+                      listField.map((f, index) => (
+                        <Stadium
+                          key={index}
+                          selectedStadium={selectedStadium}
+                          field={f}
+                          from="stadium11"
+                          setStadiumData={setStadiumData}
+                        />
+                      ))
                     ) : (
-                      <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
+                      <p className="no-data-message">No data available</p>
                     )}
-
-                    {/* Nếu không có stadium nào khớp với tên */}
-                    {selectedStadium &&
-                      listField.filter(
-                        (f) =>
-                          f.nameStadium?.trim().toLowerCase() ===
-                          selectedStadium.name?.trim().toLowerCase()
-                      ).length === 0 && (
-                        <p className="no-data-message">No data available</p>
-                      )}
                   </div>
                 </div>
               </div>

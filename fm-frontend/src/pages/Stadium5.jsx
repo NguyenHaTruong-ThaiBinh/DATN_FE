@@ -9,9 +9,11 @@ import RowOne from '../component/RowOne';
 import Stadium from '../component/Stadium';
 import EditStadium from '../component/EditStadium';
 import DeleteStadium from '../component/DeleteStadium';
-import { fetchData } from '../API/Api';
+import { fetchDataByIdStadiumAndIdTypeAndEnable } from '../API/Api';
 import EditPriceField from '../component/EditPriceField';
 import ViewPrice from '../component/ViewPrice';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Stadium5() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -20,6 +22,7 @@ function Stadium5() {
   const [stadiumData, setStadiumData] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [isFresh, setIsFresh] = useState(false);
+
   //test local storage
   const idUser = 1;
   localStorage.setItem('idUser', idUser);
@@ -31,25 +34,35 @@ function Stadium5() {
   });
 
   //
-
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
   };
+
+  //lấy danh sách sân ra
   useEffect(() => {
-    fetchData('field')
-      .then((respone) => {
-        setListField(respone.data.result);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [refresh]);
+    if (selectedStadium) {
+      const idStadium = selectedStadium.idStadium;
+      fetchDataByIdStadiumAndIdTypeAndEnable('field', idStadium, 1)
+        .then((respone) => {
+          setListField(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [selectedStadium, refresh]);
+
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <HeaderComponent
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}
@@ -84,36 +97,18 @@ function Stadium5() {
                   </div>
                   <div className="row justify-content-center">
                     {selectedStadium ? (
-                      listField
-                        .filter(
-                          (f) =>
-                            f.nameStadium?.trim().toLowerCase() ===
-                              selectedStadium.name?.trim().toLowerCase() &&
-                            f.nameType === '7' &&
-                            f.enable === 'ENABLE'
-                        )
-                        .map((f, index) => (
-                          <Stadium
-                            key={index}
-                            selectedStadium={selectedStadium}
-                            field={f}
-                            setStadiumData={setStadiumData}
-                            from="stadium5"
-                          />
-                        ))
+                      listField.map((f, index) => (
+                        <Stadium
+                          key={index}
+                          selectedStadium={selectedStadium}
+                          field={f}
+                          setStadiumData={setStadiumData}
+                          from="stadium5"
+                        />
+                      ))
                     ) : (
                       <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
                     )}
-
-                    {/* Nếu không có stadium nào khớp với tên */}
-                    {selectedStadium &&
-                      listField.filter(
-                        (f) =>
-                          f.nameStadium?.trim().toLowerCase() ===
-                          selectedStadium.name?.trim().toLowerCase()
-                      ).length === 0 && (
-                        <p className="no-data-message">No data available</p>
-                      )}
                   </div>
                 </div>
               </div>

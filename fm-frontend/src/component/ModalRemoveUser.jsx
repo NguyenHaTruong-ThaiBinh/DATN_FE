@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { updateEnableField } from '../API/Api';
+import { toast } from 'react-toastify';
 
 function ModalRemoveUser({ user, setIsRefresh }) {
   const [idUser, setIdUser] = useState('');
@@ -11,7 +12,7 @@ function ModalRemoveUser({ user, setIsRefresh }) {
   const handleRemove = async () => {
     try {
       await updateEnableField('users', idUser);
-      alert('Remove Success');
+      toast.success('Remove Successfull');
       document.querySelector('#removeuser [data-bs-dismiss="modal"]')?.click();
       setIsRefresh((prev) => !prev);
     } catch (error) {
@@ -21,7 +22,7 @@ function ModalRemoveUser({ user, setIsRefresh }) {
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       }
     }
   };
