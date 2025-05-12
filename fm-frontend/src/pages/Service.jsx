@@ -19,6 +19,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalDeleteServiceOrder from '../modal/ModalDeleteServiceOrder';
 import ModalEditServiceOrder from '../modal/ModalEditServiceOrder';
+import ModalDetailService from '../modal/ModalDetailService';
+import ModalAddBillService from '../modal/ModalAddBillService';
 
 function Service() {
   const [sidebarSize, setSidebarSize] = useState('default');
@@ -173,15 +175,13 @@ function Service() {
             </div>
             <div class="row d-flex flex-nowrap overflow-auto">
               {selectedStadium ? (
-                listServices
-                  .filter((s) => s.enable === 'ENABLE')
-                  .map((s, index) => (
-                    <ServiceItem
-                      key={index}
-                      service={s}
-                      setServicesData={setServicesData}
-                    />
-                  ))
+                listServices.map((s, index) => (
+                  <ServiceItem
+                    key={index}
+                    service={s}
+                    setServicesData={setServicesData}
+                  />
+                ))
               ) : (
                 <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
               )}
@@ -308,6 +308,7 @@ function Service() {
                                             setSelectedServiceOrder(
                                               serviceOrder
                                             );
+                                            setIsRefresh((prev) => !prev);
                                           }}
                                         ></i>
                                       </a>
@@ -374,6 +375,7 @@ function Service() {
                                             setSelectedServiceOrder(
                                               serviceOrder
                                             );
+                                            setIsRefresh((prev) => !prev);
                                           }}
                                         ></i>
                                       </a>
@@ -423,7 +425,15 @@ function Service() {
         selectedServiceOrder={selectedServiceOrder}
         setIsRefresh={setIsRefresh}
       />
-      <ModalEditServiceOrder selectedServiceOrder={selectedServiceOrder} />
+      <ModalEditServiceOrder
+        selectedServiceOrder={selectedServiceOrder}
+        setIsRefresh={setIsRefresh}
+      />
+      <ModalDetailService servicesData={servicesData} />
+      <ModalAddBillService
+        servicesData={servicesData}
+        setIsRefresh={setIsRefresh}
+      />
     </>
   );
 }

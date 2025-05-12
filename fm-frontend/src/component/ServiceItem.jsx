@@ -16,12 +16,32 @@ function ServiceItem({ service, setServicesData }) {
                 <i class="fa-solid fa-ellipsis-vertical"></i>
               </a>
               <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#a">
-                  <i class="fa-regular fa-eye me-2"></i> View
-                </a>
-                <a
+                <div
                   class="dropdown-item"
-                  href="#a"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addservice"
+                  onClick={() => {
+                    setServicesData({
+                      id: service.idService,
+                    });
+                  }}
+                >
+                  <i class="fas fa-plus me-2"></i> Add
+                </div>
+                <div
+                  class="dropdown-item"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailservice"
+                  onClick={() =>
+                    setServicesData({
+                      id: service.idService,
+                    })
+                  }
+                >
+                  <i class="fa-regular fa-eye me-2"></i> View
+                </div>
+                <div
+                  class="dropdown-item"
                   data-bs-toggle="modal"
                   data-bs-target="#updateservices"
                   onClick={() =>
@@ -36,10 +56,9 @@ function ServiceItem({ service, setServicesData }) {
                   }
                 >
                   <i class="fa-solid fa-broom me-2"></i> Update
-                </a>
-                <a
+                </div>
+                <div
                   class="dropdown-item"
-                  href="#a"
                   data-bs-toggle="modal"
                   data-bs-target="#removeservice"
                   onClick={() =>
@@ -50,7 +69,7 @@ function ServiceItem({ service, setServicesData }) {
                   }
                 >
                   <i class="fa-solid fa-trash-can me-2"></i> Delete
-                </a>
+                </div>
               </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>

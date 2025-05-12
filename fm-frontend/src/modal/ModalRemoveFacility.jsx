@@ -2,43 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { updateEnableField } from '../API/Api';
 import { toast } from 'react-toastify';
 
-function DeleteStadium({ stadiumData, setRefresh }) {
+function ModalRemoveFacility({ facilityData, setIsRefresh }) {
+  const [idFacility, setIdFacility] = useState('');
   const [name, setName] = useState('');
-  const [idField, setIdField] = useState('');
 
   useEffect(() => {
-    if (stadiumData) {
-      setIdField(stadiumData.idField || '');
-      setName(stadiumData.name || '');
+    if (facilityData) {
+      setIdFacility(facilityData.idFacility);
+      setName(facilityData.name);
     }
-  }, [stadiumData]);
+  }, [facilityData]);
+
   const handleRemove = async () => {
     try {
-      await updateEnableField('field', idField);
-      toast.success('Remove Success');
+      await updateEnableField('facility', idFacility);
+      toast.success('Remove Successfull');
       document
-        .querySelector('#deleteStadium [data-bs-dismiss="modal"]')
+        .querySelector('#removefacility [data-bs-dismiss="modal"]')
         ?.click();
-      setRefresh((prev) => !prev);
+      setIsRefresh((prev) => !prev);
     } catch (error) {
-      const msg = error.response?.data?.message || 'Error';
-      toast.error(msg);
+      console.error('Error:', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      }
     }
   };
-
   return (
     <div
       className="modal fade"
-      id="deleteStadium"
+      id="removefacility"
       tabIndex="-1"
-      aria-labelledby="deleteStadiumLabel"
+      aria-labelledby="removeserviceLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="deleteStadiumLabel">
-              Remove Field
+            <h5 className="modal-title" id="removeserviceLabel">
+              Confirm Service Remove
             </h5>
             <button
               type="button"
@@ -48,10 +54,8 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             ></button>
           </div>
           <div className="modal-body">
-            Are you sure you want to delete <span> </span>
-            <span style={{ color: '#dc3545', fontWeight: 'bold' }}>
-              {name}
-            </span>{' '}
+            Are you sure you want to remove{' '}
+            <span style={{ color: '#dc3545', fontWeight: 'bold' }}>{name}</span>{' '}
             ?
           </div>
           <div className="modal-footer">
@@ -65,10 +69,9 @@ function DeleteStadium({ stadiumData, setRefresh }) {
             <button
               type="button"
               className="btn btn-danger"
-              data-bs-dismiss="modal"
               onClick={handleRemove}
             >
-              Delete
+              Remove
             </button>
           </div>
         </div>
@@ -77,4 +80,4 @@ function DeleteStadium({ stadiumData, setRefresh }) {
   );
 }
 
-export default DeleteStadium;
+export default ModalRemoveFacility;

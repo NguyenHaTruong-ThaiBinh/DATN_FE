@@ -76,7 +76,7 @@ const LeftMenuComponent = () => {
                     aria-controls="Booking"
                   >
                     <i className="iconoir-task-list menu-icon"></i>
-                    <span>Booking</span>
+                    <span>Field</span>
                   </a>
                   <div
                     className={`collapse ${
@@ -123,7 +123,7 @@ const LeftMenuComponent = () => {
                     onClick={() => navigate('/history_booking')}
                   >
                     <i className="iconoir-plug-type-l menu-icon"></i>
-                    <span>Booking Status</span>
+                    <span>Booking</span>
                   </div>
                 </li>
                 {/* Service */}
@@ -241,23 +241,23 @@ const LeftMenuComponent = () => {
                       <li className="nav-item">
                         <div
                           className={`nav-link ${
-                            activeMenu === '/handle' ? 'active' : ''
-                          }`}
-                          onClick={() => navigate('/handle')}
-                        >
-                          <i className="fas fa-wrench menu-icon"></i>
-                          <span>Handle</span>
-                        </div>
-                      </li>
-                      <li className="nav-item">
-                        <div
-                          className={`nav-link ${
                             activeMenu === '/match' ? 'active' : ''
                           }`}
                           onClick={() => navigate('/match')}
                         >
                           <i className="fas fa-handshake menu-icon"></i>
                           <span>Match</span>
+                        </div>
+                      </li>
+                      <li className="nav-item">
+                        <div
+                          className={`nav-link ${
+                            activeMenu === '/handle' ? 'active' : ''
+                          }`}
+                          onClick={() => navigate('/handle')}
+                        >
+                          <i className="fas fa-wrench menu-icon"></i>
+                          <span>Cancel</span>
                         </div>
                       </li>
                     </ul>
@@ -279,6 +279,22 @@ const LeftMenuComponent = () => {
                     <span>Chat</span>
                   </div>
                 </li>
+                {/* report */}
+                <li
+                  className={`nav-item ${
+                    activeMenu === '/report' ? 'active' : ''
+                  }`}
+                >
+                  <div
+                    className={`nav-link ${
+                      activeMenu === '/report' ? 'active' : ''
+                    }`}
+                    onClick={() => navigate('/report')}
+                  >
+                    <i className="iconoir-stats-report menu-icon"></i>
+                    <span>Report</span>
+                  </div>
+                </li>
                 {/* map */}
                 <li className="nav-item">
                   <a
@@ -295,7 +311,7 @@ const LeftMenuComponent = () => {
                     }
                     aria-controls="sidebarFeature"
                   >
-                    <i className="fas fa-users menu-icon"></i>
+                    <i className="fas fa-tools menu-icon"></i>
                     <span>Feature</span>
                   </a>
                   <div

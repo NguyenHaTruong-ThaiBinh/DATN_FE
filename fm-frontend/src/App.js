@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function App({ component: Component, title }) {
   const [sidebarSize, setSidebarSize] = useState('default');
   const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [isRefresh, setIsRefresh] = useState(false);
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
@@ -32,6 +33,7 @@ function App({ component: Component, title }) {
         onToggleMenu={toggleMenu}
         selectedStadium={selectedStadium}
         setSelectedStadium={setSelectedStadium}
+        isRefresh={isRefresh}
       />
       <LeftMenuComponent />
       <div className="startbar-overlay d-print-none"></div>
@@ -39,7 +41,13 @@ function App({ component: Component, title }) {
         <div className="page-content">
           <div className="container-fluid">
             <RowOne title={title} />
-            {Component && <Component />}
+            {Component && (
+              <Component
+                selectedStadium={selectedStadium}
+                setSelectedStadium={setSelectedStadium}
+                setIsRefresh={setIsRefresh}
+              />
+            )}
           </div>
           <Offcanvas />
           <FooterComponent />

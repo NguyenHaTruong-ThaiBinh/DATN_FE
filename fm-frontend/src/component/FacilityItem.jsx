@@ -1,82 +1,105 @@
 import React from 'react';
-function FacilityItem() {
+function FacilityItem({ facility, setFacilityData }) {
   return (
     <>
-      <div class="col-md-6 col-lg-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="dropdown float-end">
-              <a
-                href="#"
-                class="text-muted fs-16 dropdown-toggle p-1"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-eye me-2"></i> View Detail
+      <div class="col-md-4 col-lg-4">
+        <div class="border-dashed border-theme-color rounded">
+          <div class="card bg-light ">
+            <div class="card-body border-dashed-bottom border-theme-color">
+              <div class="dropdown float-end">
+                <a
+                  href="#"
+                  class="text-muted fs-16 dropdown-toggle p-1"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
                 </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-times-circle me-2"></i> Edit
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-trash me-2"></i> Delete
-                </a>
-              </div>
-            </div>
-            <div class="d-flex justify-content-center">
-              <img
-                src="assets/images/logos/lang-logo/dropbox.png"
-                class="me-2 align-self-center thumb-xl"
-                alt="..."
-              />
-            </div>
-            <h5 class="fw-semibold mt-3 fs-3 text-center">Đèn Sân</h5>
-            <div class="d-flex justify-content-between my-2">
-              <table class="table table-sm mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th scope="col" class="text-center">
-                      Inventory
-                    </th>
-                    <th scope="col" class="text-center">
-                      Damaged
-                    </th>
-                    <th scope="col" class="text-center">
-                      Usable
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-center">10</td>
-                    <td class="text-center">20</td>
-                    <td class="text-center">30</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="flex-grow-1 text-truncate">
-                <div class="d-flex align-items-center">
+                <div class="dropdown-menu dropdown-menu-end">
                   <div
-                    class="progress bg-secondary-subtle w-100"
-                    style={{ height: '5px' }}
-                    role="progressbar"
-                    aria-label="Success example"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addbillfacility"
+                    onClick={() => {
+                      setFacilityData({
+                        idFacility: facility.idFacility,
+                      });
+                    }}
                   >
-                    <div
-                      class="progress-bar bg-secondary"
-                      style={{ width: '15%' }}
-                    ></div>
+                    <i class="fas fa-plus me-2"></i> Add
                   </div>
-                  <small class="flex-shrink-1 ms-1">15%</small>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#detailfacility"
+                    onClick={() => {
+                      setFacilityData({
+                        idFacility: facility.idFacility,
+                      });
+                    }}
+                  >
+                    <i class="fas fa-eye me-2"></i> View
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editfacility"
+                    onClick={() => {
+                      setFacilityData({
+                        idFacility: facility.idFacility,
+                        name: facility.name,
+                        usable: facility.usable,
+                        inventory: facility.inventory,
+                      });
+                    }}
+                  >
+                    <i class="fas fa-times-circle me-2"></i> Edit
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#removefacility"
+                    onClick={() => {
+                      setFacilityData({
+                        idFacility: facility.idFacility,
+                        name: facility.name,
+                      });
+                    }}
+                  >
+                    <i class="fas fa-trash me-2"></i> Delete
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <img
+                    src={facility.img}
+                    alt=""
+                    class="rounded-circle thumb-xxl mx-auto d-inline-block"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-2 text-truncate">
+                  <h5 class="m-0 fw-bold">{facility.name}</h5>
+                </div>
+              </div>
+              <div class="row mt-3 align-items-center">
+                <div class="col-12">
+                  <div className="text-body d-flex align-items-center mb-2">
+                    <i className="iconoir-box fs-5 me-2 text-primary"></i>
+                    <span className="fw-medium me-1">Inventory:</span>
+                    <span>{facility.inventory}</span>
+                  </div>
+                  <div className="text-body d-flex align-items-center mb-2">
+                    <i className="iconoir-tools fs-5 me-2 text-danger"></i>
+                    <span className="fw-medium me-1">Damaged:</span>
+                    <span>{facility.damaged}</span>
+                  </div>
+                  <div className="text-body d-flex align-items-center">
+                    <i className="iconoir-check fs-5 me-2 text-success"></i>
+                    <span className="fw-medium me-1">Usable:</span>
+                    <span>{facility.usable}</span>
+                  </div>
                 </div>
               </div>
             </div>

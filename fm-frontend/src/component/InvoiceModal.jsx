@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { fetchDataById } from '../API/Api';
+import { fetchDataById, postFormData } from '../API/Api';
+import { toast } from 'react-toastify';
 
-function InvoiceModal({ booking, isFresh }) {
+function InvoiceModal({ booking, isFresh, selectedStadium }) {
   const [nameStadium, setNameStadium] = useState('');
   const [nameUser, setNameUser] = useState('');
   const [phoneNumberUser, setPhoneNumberUser] = useState('');
@@ -13,6 +14,35 @@ function InvoiceModal({ booking, isFresh }) {
   const [totalPrice, setTotalPrice] = useState('');
   const [idBooking, setIdBooking] = useState('');
   const [listServiceOrder, setListServiceOrder] = useState('');
+  const [idStadium, setIdStadium] = useState('');
+  const idUser = localStorage.getItem('idUser');
+
+  useEffect(() => {
+    if (selectedStadium) {
+      setIdStadium(selectedStadium.idStadium);
+    }
+  }, [selectedStadium]);
+
+  const handleSave = async () => {
+    if (!idStadium || !idUser || !idBooking || !day || !finalTotal) {
+      toast.error('Please enter complete information!');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('day', day);
+    formData.append('idStadium', idStadium);
+    formData.append('idUser', idUser);
+    formData.append('idBooking', idBooking);
+    formData.append('totalPrice', finalTotal);
+    try {
+      await postFormData('invoice', formData);
+      toast.success('Print Successfull!');
+      document.querySelector('#invoice [data-bs-dismiss="modal"]')?.click();
+    } catch (error) {
+      toast.error(`${error.response.data.message}`);
+    }
+  };
+
   useEffect(() => {
     if (booking) {
       setNameStadium(booking.nameStadium);
@@ -39,6 +69,11 @@ function InvoiceModal({ booking, isFresh }) {
         });
     }
   }, [idBooking, isFresh]);
+
+  const serviceTotal = Array.isArray(listServiceOrder)
+    ? listServiceOrder.reduce((sum, item) => sum + Number(item.totalPrice), 0)
+    : 0;
+  const finalTotal = Number(totalPrice) + serviceTotal;
   return (
     <>
       <div
@@ -81,7 +116,9 @@ function InvoiceModal({ booking, isFresh }) {
                             {nameStadium}
                           </h5>
                           <h5 class="mb-0 fw-semibold text-white">
-                            <span class="text">Since</span> 2003
+                            <h5 className="mb-2 fw-bold text-primary">
+                              ID: {idBooking}
+                            </h5>
                           </h5>
                         </div>
                       </div>
@@ -174,17 +211,7 @@ function InvoiceModal({ booking, isFresh }) {
                                   </td>
                                   <td className="border-0 fs-14 text-dark">
                                     <b>
-                                      {(
-                                        Number(totalPrice) +
-                                        (Array.isArray(listServiceOrder)
-                                          ? listServiceOrder.reduce(
-                                              (sum, item) =>
-                                                sum + Number(item.totalPrice),
-                                              0
-                                            )
-                                          : 0)
-                                      ).toLocaleString('vi-VN')}{' '}
-                                      VND
+                                      {finalTotal.toLocaleString('vi-VN')} VND
                                     </b>
                                   </td>
                                 </tr>
@@ -194,7 +221,9 @@ function InvoiceModal({ booking, isFresh }) {
                         </div>
                       </div>
                       <div class="text-end mt-3">
-                        <button class="btn btn-success">Print</button>
+                        <button class="btn btn-success" onClick={handleSave}>
+                          Print
+                        </button>
                       </div>
                     </div>
                   </div>

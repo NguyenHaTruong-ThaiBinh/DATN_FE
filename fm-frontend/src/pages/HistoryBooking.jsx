@@ -127,6 +127,7 @@ function HistoryBooking() {
             <table className="table table-bordered mb-0 table-centered text-center">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th style={{ width: '20%' }}>Name Field</th>
                   <th style={{ width: '13%' }}>Type</th>
                   <th style={{ width: '13%' }}>Time</th>
@@ -140,6 +141,7 @@ function HistoryBooking() {
               <tbody>
                 {filteredBooking.map((booking, index) => (
                   <tr key={index}>
+                    <td>{index + 1}</td>
                     <td>{booking.nameField}</td>
                     <td>{booking.nameType}</td>
                     <td>{booking.time}</td>
@@ -218,7 +220,11 @@ function HistoryBooking() {
           <FooterComponnent />
         </div>
       </div>
-      <InvoiceModal booking={selectedBooking} isFresh={isFresh} />
+      <InvoiceModal
+        booking={selectedBooking}
+        isFresh={isFresh}
+        selectedStadium={selectedStadium}
+      />
       <CancelStadium booking={selectedBooking} setIsFresh={setIsFresh} />
       <ModalAddService
         selectedStadium={selectedStadium}

@@ -34,12 +34,19 @@ export const updateFormData = (endpoint, id, formData) => {
   });
 };
 
+//updateEnableMatching
+export const updateEnableByUser = (endpoint, id, formData) => {
+  return axios.put(`${API_BASE_URL}/${endpoint}/${id}/enable/user`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
 //getById
 export const fetchDataById = (endpoint, id) => {
   return axios.get(`${API_BASE_URL}/${endpoint}/${id}`);
 };
-
-//getByIdTypeAndIdStadium
 
 //putEnableField
 export const updateEnableField = (endpoint, id) => {
@@ -70,6 +77,19 @@ export const fetchDataByIdFieldAndDay = (endpoint, idField, day) => {
   return axios.get(`${API_BASE_URL}/${endpoint}/${idField}/${day}`);
 };
 
+//getPriceTotalServiceMonthly
+export const getTotalServiceMontly = (endpoint, idStadium) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/monthly`);
+};
+//getListInvoiceByDay
+export const getListInvoiceByDay = (endpoint, idStadium, day) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/${day}/daily`);
+};
+//getTotalPriceInvoceByDay
+export const getTotalPriceInvoiceByDay = (endpoint, idStadium, day) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/${day}`);
+};
+
 //getFieldByIdStadiumAndIdTypeAndEnable
 export const fetchDataByIdStadiumAndIdTypeAndEnable = (
   endpoint,
@@ -95,7 +115,57 @@ export const getServiceByIdService = (endpoint, idService) => {
 //updateServiceOrderByIdServiceOrder
 export const updateServiceOrderByIdServiceOrder = (
   endpoint,
-  idServiceOrder
+  idServiceOrder,
+  formData
 ) => {
-  return axios.put(`${API_BASE_URL}/${endpoint}/${idServiceOrder}`);
+  return axios.put(`${API_BASE_URL}/${endpoint}/${idServiceOrder}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+//getBookingByIdField
+export const getBookingByIdField = (endpoint, idField) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idField}/Field`);
+};
+
+//get
+export const getDataByIdStadium = (endpoint, idStadium, prefix) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/${prefix}`);
+};
+
+//update Message
+export const updateMessageRead = (endpoint, idMessage) => {
+  return axios.put(`${API_BASE_URL}/${endpoint}/${idMessage}`);
+};
+
+//getMatchByIdStadium
+export const getMatchByIdStadium = (endpoint, idStadium) => {
+  return axios.get(`${API_BASE_URL}/${endpoint}/${idStadium}/match`);
+};
+
+//cancelMatchByUser
+export const cancelMatch = (endpoint, idMatch, formData) => {
+  return axios.put(
+    `${API_BASE_URL}/${endpoint}/${idMatch}/cancelMatching`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+};
+
+//changePassword
+export const changePassword = (endpoint, idUser, formData) => {
+  return axios.put(
+    `${API_BASE_URL}/${endpoint}/${idUser}/changePassword`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 };

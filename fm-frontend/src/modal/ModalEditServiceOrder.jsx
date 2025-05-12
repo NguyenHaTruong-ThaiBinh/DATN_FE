@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getServiceByIdService } from '../API/Api';
+import {
+  getServiceByIdService,
+  updateServiceOrderByIdServiceOrder,
+} from '../API/Api';
 
-function ModalEditServiceOrder({ selectedServiceOrder }) {
+function ModalEditServiceOrder({
+  selectedServiceOrder,
+  setIsRefresh,
+  isRefresh,
+}) {
   const [idServiceOrder, setIdServiceOrder] = useState('');
   const [nameField, setNameField] = useState('');
   const [nameService, setNameService] = useState('');
@@ -33,13 +40,36 @@ function ModalEditServiceOrder({ selectedServiceOrder }) {
           console.error(err);
         });
     }
-  }, [idService]);
+  }, [idService, isRefresh]);
   //set số lượng max
   useEffect(() => {
     if (service) {
       setMaxQuantity(service.quantity);
     }
   }, [service]);
+
+  //update quantity theo idServiceOrder
+  const handleUpdateServiceOrder = async () => {
+    const formData = new FormData();
+    formData.append('quantity', quantity);
+    try {
+      await updateServiceOrderByIdServiceOrder(
+        'serviceOrder',
+        idServiceOrder,
+        formData
+      );
+      setIsRefresh((prev) => !prev);
+      toast.success('Update Successfull!');
+      document
+        .querySelector('#editserviceorder [data-bs-dismiss="modal"]')
+        ?.click();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Update false!');
+      document
+        .querySelector('#editserviceorder [data-bs-dismiss="modal"]')
+        ?.click();
+    }
+  };
   return (
     <div
       className="modal fade"
@@ -125,7 +155,7 @@ function ModalEditServiceOrder({ selectedServiceOrder }) {
                             `Quantity cannot be greater than the maximum available quantity: ${maxQuantity}`
                           );
                         } else {
-                          setQuantity(newQuantity); // Cập nhật giá trị nếu không vượt quá maxQuantity
+                          setQuantity(newQuantity);
                         }
                       }}
                     />
@@ -135,7 +165,11 @@ function ModalEditServiceOrder({ selectedServiceOrder }) {
             </div>
           </div>
           <div className="modal-footer">
-            <button type="submit" class="btn btn-primary">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onClick={handleUpdateServiceOrder}
+            >
               Submit
             </button>
             <button

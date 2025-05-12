@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { postFormData } from '../API/Api';
 import { toast } from 'react-toastify';
 
-function AddStadium() {
+function AddStadium({ setIsRefresh }) {
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [name, setName] = useState('');
@@ -43,6 +43,7 @@ function AddStadium() {
       await postFormData('stadium', formData);
       toast.success('Add Stadium Successfull!');
       document.querySelector('#addstadium [data-bs-dismiss="modal"]')?.click();
+      setIsRefresh((prev) => !prev);
       resetForm();
     } catch (error) {
       toast.error(`${error.response.data.message}`);

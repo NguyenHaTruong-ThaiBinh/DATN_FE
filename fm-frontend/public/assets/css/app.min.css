@@ -338,7 +338,7 @@ html[data-bs-theme='dark'] .btn-outline-light:active {
   display: none;
 }
 .dropdown-lg {
-  width: 320px;
+  width: 400px;
 }
 label {
   color: var(--bs-label-color);

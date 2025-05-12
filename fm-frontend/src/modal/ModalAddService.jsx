@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 function ModalAddService({ selectedStadium, booking }) {
   const [idBooking, setIdBooking] = useState('');
   const [nameField, setNameField] = useState('');
-
   const [idStadium, setIdStadium] = useState('');
   const [listServices, setListServices] = useState([]);
   const [selectedService, setSelectedService] = useState('');
@@ -102,6 +101,9 @@ function ModalAddService({ selectedStadium, booking }) {
       setSelectedService('');
       setQuantity('');
       setRefresh((prev) => !prev);
+      document
+        .querySelector('#modaladdservice [data-bs-dismiss="modal"]')
+        ?.click();
     } catch (error) {
       toast.error(`${error.response.data.message}`);
     }
@@ -128,9 +130,7 @@ function ModalAddService({ selectedStadium, booking }) {
             ></button>
           </div>
           <div className="modal-body">
-            <h5 className="mb-2 fw-bold text-primary">
-              Booking ID: {idBooking}
-            </h5>
+            <h5 className="mb-2 fw-bold text-primary">ID: {idBooking}</h5>
             <h5 className="mb-4 fw-semibold text-secondary">
               Field Name: {nameField}
             </h5>
@@ -227,7 +227,7 @@ function ModalAddService({ selectedStadium, booking }) {
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-danger"
               onClick={handleSave}
             >
               Save

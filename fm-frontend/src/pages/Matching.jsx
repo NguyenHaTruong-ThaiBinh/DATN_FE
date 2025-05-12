@@ -7,22 +7,79 @@ import RowOne from '../component/RowOne';
 import { useState, useEffect } from 'react';
 import OpponentModal from '../component/OpponentModal';
 import FormRequest from '../component/FormRequest';
+import MatchItem from '../component/MatchItem';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { fetchData, fetchDataById } from '../API/Api';
+import DetailMatching from '../modal/DetailMatching';
+import ModalRemoveMatching from '../modal/ModalRemoveMatching';
 
 function Matching() {
+  const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
+  const [isRefresh, setIsRefresh] = useState(false);
+  const [listMatching, setListMatching] = useState([]);
+  const [matchingData, setMatchingData] = useState('');
+  const [idStadium, setIdStadium] = useState('');
   const [sidebarSize, setSidebarSize] = useState('default');
+  const [listTime, setListTime] = useState([]);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
 
   // Hàm toggle menu
   const toggleMenu = () => {
     setSidebarSize((prev) => (prev === 'collapsed' ? 'default' : 'collapsed'));
   };
 
+  //set idStadium
+  useEffect(() => {
+    if (selectedStadium) {
+      setIdStadium(selectedStadium.idStadium);
+    }
+  }, [selectedStadium]);
+  //lấy danh sách time ra
+  useEffect(() => {
+    fetchData('time')
+      .then((respone) => {
+        setListTime(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+  //lấy danh sách matching theo idStadium
+  useEffect(() => {
+    fetchDataById('matching', idStadium)
+      .then((respone) => {
+        setListMatching(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [idStadium, isRefresh]);
   // Cập nhật class cho body khi sidebarSize thay đổi
   useEffect(() => {
     document.body.setAttribute('data-sidebar-size', sidebarSize);
   }, [sidebarSize]);
+
+  //lọc danh sách theo thanh tìm kiếm
+  const fifteredMatching = listMatching.filter((matching) => {
+    const matchTime = selectedTime ? matching.time === selectedTime : true;
+    const matchDay = selectedDate ? matching.day === selectedDate : true;
+    return matchTime && matchDay;
+  });
   return (
     <>
-      <HeaderComponnent onToggleMenu={toggleMenu} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
+      <HeaderComponnent
+        onToggleMenu={toggleMenu}
+        selectedStadium={selectedStadium}
+        setSelectedStadium={setSelectedStadium}
+        isRefresh={isRefresh}
+      />
       <LeftMenuComponnent />
       <div className="startbar-overlay d-print-none"></div>
       <div className="page-wrapper">
@@ -35,9 +92,7 @@ function Matching() {
                   <div className="card-header">
                     <div className="row align-items-center">
                       <div className="col">
-                        <h4 className="card-title">
-                          ⚽⚽
-                        </h4>
+                        <h4 className="card-title">⚽⚽</h4>
                       </div>
                       <div className="col-auto">
                         <button
@@ -51,6 +106,7 @@ function Matching() {
                     </div>
                   </div>
                   <div class="row justify-content-center mb-3">
+                    {/* Cột chọn Day */}
                     <div className="col-md-6 d-flex align-items-center">
                       <label
                         htmlFor="date-input"
@@ -63,6 +119,8 @@ function Matching() {
                           className="form-control form-control-sm"
                           type="date"
                           id="date-input"
+                          value={selectedDate}
+                          onChange={(e) => setSelectedDate(e.target.value)}
                         />
                       </div>
                     </div>
@@ -78,59 +136,33 @@ function Matching() {
                       <div className="col-sm-7">
                         <select
                           className="form-select form-select-sm"
-                          id="time-select"
+                          value={selectedTime}
+                          onChange={(e) => setSelectedTime(e.target.value)}
                         >
-                          <option defaultValue>Time</option>
-                          <option value="1">7:00 AM</option>
-                          <option value="2">10:00 AM</option>
-                          <option value="3">1:00 PM</option>
-                          <option value="4">4:00 PM</option>
-                          <option value="5">7:00 PM</option>
-                          <option value="6">10:00 PM</option>
+                          <option value="">...</option>
+                          {listTime.map((item, index) => (
+                            <option key={index} value={item.time}>
+                              {item.time}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     </div>
                   </div>
                   <div class="card">
                     <div class="card-body pt-0">
-                      <div class="table-responsive-sm">
-                        <table class="table mb-0">
-                          <thead class="table-light">
-                            <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">Name</th>
-                              <th scope="col">Phone Number</th>
-                              <th scope="col">Field</th>
-                              <th scope="col">Type</th>
-                              <th scope="col">Time</th>
-                              <th scope="col">Day</th>
-                              <th scope="col">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="table-primary">
-                              <th scope="row">1</th>
-                              <td class="">Mark</td>
-                              <td class="">0393878300</td>
-                              <td class="">Field 1 - YenHoa</td>
-                              <td class="">7</td>
-                              <td class="">7:00 PM</td>
-                              <td class="">25/09/2025</td>
-                              <td class="">
-                                {' '}
-                                <button
-                                  type="button"
-                                  class="btn btn-success btn-sm"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#exampleModalSuccess"
-                                >
-                                  Accept
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      {selectedStadium ? (
+                        fifteredMatching.map((m, index) => (
+                          <MatchItem
+                            key={index}
+                            matching={m}
+                            setMatchingData={setMatchingData}
+                            setIsRefresh={setIsRefresh}
+                          />
+                        ))
+                      ) : (
+                        <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
+                      )}
                     </div>
                   </div>
                 </div>
@@ -141,7 +173,15 @@ function Matching() {
           <FooterComponnent />
         </div>
       </div>
-      <OpponentModal />
+      <OpponentModal
+        selectedStadium={selectedStadium}
+        setIsRefresh={setIsRefresh}
+      />
+      <DetailMatching matchingData={matchingData} />
+      <ModalRemoveMatching
+        matchingData={matchingData}
+        setIsRefresh={setIsRefresh}
+      />
       <FormRequest />
     </>
   );

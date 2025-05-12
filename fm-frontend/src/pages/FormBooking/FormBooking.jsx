@@ -6,6 +6,7 @@ import {
   fetchDataByIdFieldAndDay,
   postFormData,
 } from '../../API/Api';
+import { toast } from 'react-toastify';
 
 function FormBooking() {
   const { state } = useLocation();
@@ -29,7 +30,7 @@ function FormBooking() {
 
   const handlePay = async () => {
     if (!idUser || !idPrice || !date) {
-      alert('Please enter complete information!');
+      toast.error('Please enter complete information!');
       return;
     }
     const formData = new FormData();
@@ -44,7 +45,7 @@ function FormBooking() {
         window.location.href = url;
       });
     } catch (error) {
-      alert(`${error.response.data.message}`);
+      toast.error(`${error.response.data.message}`);
     }
   };
   //lấy thời gian theo ngày và id sânsân
@@ -147,99 +148,150 @@ function FormBooking() {
                 </div>
               </div>
               <div className="row justify-content-center">
-                <div className="col-12">
-                  <div className="card">
-                    <div className="card-body pt-0">
-                      <div className="row">
-                        <div className="col-lg-6">
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Name
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                className="form-control"
-                                type="text"
-                                value={user.name}
-                                readOnly
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Field
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                className="form-control"
-                                type="text"
-                                value={name}
-                                readOnly
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Type
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                className="form-control"
-                                type="number"
-                                value={type}
-                                readOnly
-                              />
-                            </div>
+                <div class="card-body pt-0">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="mb-3 row">
+                        <label
+                          for="example-text-input"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Name
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            type="text"
+                            value={user.name}
+                            id="example-text-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label
+                          for="field"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Field
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            type="text"
+                            value={name}
+                            id="field"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label
+                          for="type"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Type
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            type="number"
+                            value={type}
+                            id="type"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row has-error">
+                        <label
+                          for="inputHorizontalDnger"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Price
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            type="numbernumber"
+                            class="form-control is-invalid"
+                            id="inputHorizontalDnger"
+                            placeholder="Price"
+                            value={
+                              Number(price).toLocaleString('vi-VN') + ' VND'
+                            }
+                            readOnly
+                          />
+                          <div class="invalid-feedback">
+                            You have to pay this price!
                           </div>
                         </div>
-                        <div className="col-lg-6">
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Phone Number
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                className="form-control"
-                                type="number"
-                                value={user.phoneNumber}
-                                readOnly
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Date
-                            </label>
-                            <div className="col-sm-10">
-                              <input
-                                className="form-control"
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-3 row">
-                            <label className="col-sm-2 col-form-label text-end">
-                              Select Time
-                            </label>
-                            <div className="col-sm-10">
-                              <select
-                                className="form-select"
-                                value={selectedTime}
-                                onChange={(e) =>
-                                  setSelectedTime(e.target.value)
-                                }
-                              >
-                                <option value="">Select Time</option>
-                                {listTime.map((item, index) => (
-                                  <option key={index} value={item.idTime}>
-                                    {item.time}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                      <div class="mb-3 row">
+                        <label
+                          for="phone"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Telephone
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            type="search"
+                            value={user.phoneNumber}
+                            id="phone"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row has-success">
+                        <label
+                          for="inputHorizontalSuccess"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Email
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            type="email"
+                            class="form-control is-valid"
+                            id="inputHorizontalSuccess"
+                            value={user.email}
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label
+                          for="example-date-input"
+                          class="col-sm-2 col-form-label text-end"
+                        >
+                          Date
+                        </label>
+                        <div class="col-sm-10">
+                          <input
+                            class="form-control"
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            id="example-date-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label text-end">
+                          Time
+                        </label>
+                        <div class="col-sm-10">
+                          <select
+                            class="form-select"
+                            value={selectedTime}
+                            onChange={(e) => setSelectedTime(e.target.value)}
+                            aria-label="Default select example"
+                          >
+                            <option value="">...</option>
+                            {listTime.map((item, index) => (
+                              <option key={index} value={item.idTime}>
+                                {item.time}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
                     </div>
@@ -248,25 +300,6 @@ function FormBooking() {
               </div>
               <hr />
               <div className="row">
-                {/* Price ở góc trái */}
-                <div className="col-lg-12 col-xl-4 align-self-center">
-                  <div className="text-start">
-                    <div className="mb-3 row">
-                      <label className="col-sm-2 col-form-label fw-bold text-primary fs-5">
-                        Price
-                      </label>
-                      <div className="col-sm-10">
-                        <input
-                          className="form-control fw-bold text-danger fs-5 border-2 border-danger"
-                          type="text"
-                          value={Number(price).toLocaleString('vi-VN') + ' VND'}
-                          readOnly
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Các nút ở bên phải */}
                 <div className="col-lg-12 col-xl-4 ms-auto">
                   <div className="float-end d-print-none mt-2 mt-md-0">

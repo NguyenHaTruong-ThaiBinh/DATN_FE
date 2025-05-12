@@ -1,15 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { fetchData } from '../API/Api';
+import { fetchData, fetchDataById } from '../API/Api';
 import { useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
+import { Client } from '@stomp/stompjs';
+import { toast } from 'react-toastify';
+import SockJS from 'sockjs-client';
 
 const HeaderComponent = ({
   onToggleMenu,
   selectedStadium,
   setSelectedStadium,
+  isRefresh,
 }) => {
   const [stadiums, setStadiums] = useState([]);
   const navigate = useNavigate();
+  const idUser = localStorage.getItem('idUser');
+  const [listNotification, setListNotification] = useState([]);
+  const [Fresh, setFresh] = useState(false);
 
+  useEffect(() => {
+    const client = new Client({
+      webSocketFactory: () => new SockJS('http://localhost:8080/manager/ws'), // Đảm bảo URL này đúng
+      reconnectDelay: 5000, // Tự động reconnect mỗi 5s
+      debug: (str) => console.log('🛠️ STOMP DEBUG:', str),
+      onConnect: (frame) => {
+        console.log('✅ WebSocket connected!', frame);
+
+        // Khi kết nối xong thì subscribe tới topic của user
+        client.subscribe(`/topic/user/${idUser}`, (message) => {
+          toast.warning('New Message!', message.body);
+        });
+      },
+      onWebSocketError: (event) => {
+        console.error('❌ Lỗi WebSocket:', event);
+      },
+    });
+
+    client.activate();
+
+    // Cleanup khi component unmount
+    return () => {
+      client.deactivate();
+    };
+  }, [idUser]);
+
+  //lấy danh sách thông báo
+  useEffect(() => {
+    if (idUser) {
+      fetchDataById('message', idUser)
+        .then((respone) => {
+          setListNotification(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idUser]);
+
+  //lấy danh sách sânsân
   useEffect(() => {
     fetchData('stadium')
       .then((response) => {
@@ -20,9 +68,9 @@ const HeaderComponent = ({
         }
       })
       .catch((error) => {
-        console.error('Lỗi khi lấy dữ liệu:', error);
+        console.error('Error:', error);
       });
-  }, []);
+  }, [isRefresh]);
 
   const handleStadiumChange = (stadium) => {
     setSelectedStadium(stadium);
@@ -115,105 +163,20 @@ const HeaderComponent = ({
                       aria-labelledby="all-tab"
                       tabindex="0"
                     >
-                      <a href="#" class="dropdown-item py-3">
-                        <small class="float-end text-muted ps-2">
-                          2 min ago
-                        </small>
-                        <div class="d-flex align-items-center">
-                          <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-md rounded-circle">
-                            <i class="iconoir-wolf fs-4"></i>
-                          </div>
-                          <div class="flex-grow-1 ms-2 text-truncate">
-                            <h6 class="my-0 fw-normal text-dark fs-13">
-                              Your order is placed
-                            </h6>
-                            <small class="text-muted mb-0">
-                              Dummy text of the printing and industry.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="dropdown-item py-3">
-                        <small class="float-end text-muted ps-2">
-                          10 min ago
-                        </small>
-                        <div class="d-flex align-items-center">
-                          <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-md rounded-circle">
-                            <i class="iconoir-apple-swift fs-4"></i>
-                          </div>
-                          <div class="flex-grow-1 ms-2 text-truncate">
-                            <h6 class="my-0 fw-normal text-dark fs-13">
-                              Meeting with designers
-                            </h6>
-                            <small class="text-muted mb-0">
-                              It is a long established fact that a reader.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="dropdown-item py-3">
-                        <small class="float-end text-muted ps-2">
-                          40 min ago
-                        </small>
-                        <div class="d-flex align-items-center">
-                          <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-md rounded-circle">
-                            <i class="iconoir-birthday-cake fs-4"></i>
-                          </div>
-                          <div class="flex-grow-1 ms-2 text-truncate">
-                            <h6 class="my-0 fw-normal text-dark fs-13">
-                              UX 3 Task complete.
-                            </h6>
-                            <small class="text-muted mb-0">
-                              Dummy text of the printing.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="dropdown-item py-3">
-                        <small class="float-end text-muted ps-2">
-                          1 hr ago
-                        </small>
-                        <div class="d-flex align-items-center">
-                          <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-md rounded-circle">
-                            <i class="iconoir-drone fs-4"></i>
-                          </div>
-                          <div class="flex-grow-1 ms-2 text-truncate">
-                            <h6 class="my-0 fw-normal text-dark fs-13">
-                              Your order is placed
-                            </h6>
-                            <small class="text-muted mb-0">
-                              It is a long established fact that a reader.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                      <a href="#" class="dropdown-item py-3">
-                        <small class="float-end text-muted ps-2">
-                          2 hrs ago
-                        </small>
-                        <div class="d-flex align-items-center">
-                          <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-md rounded-circle">
-                            <i class="iconoir-user fs-4"></i>
-                          </div>
-                          <div class="flex-grow-1 ms-2 text-truncate">
-                            <h6 class="my-0 fw-normal text-dark fs-13">
-                              Payment Successfull
-                            </h6>
-                            <small class="text-muted mb-0">
-                              Dummy text of the printing.
-                            </small>
-                          </div>
-                        </div>
-                      </a>
+                      {idUser ? (
+                        listNotification.map((n, index) => (
+                          <Notifications
+                            key={index}
+                            notification={n}
+                            setFresh={setFresh}
+                          />
+                        ))
+                      ) : (
+                        <p className="no-data-message">No data available</p> // Hiển thị nếu không chọn sân
+                      )}
                     </div>
                   </div>
                 </div>
-                <a
-                  href="pages-notifications.html"
-                  class="dropdown-item text-center text-dark fs-13 py-2"
-                >
-                  View All <i class="fi-arrow-right"></i>
-                </a>
               </div>
             </li>
             <li class="dropdown topbar-item">
@@ -250,24 +213,23 @@ const HeaderComponent = ({
                 </div>
                 <div class="dropdown-divider mt-0"></div>
                 <small class="text-muted px-2 pb-1 d-block">Account</small>
-                <a class="dropdown-item" href="/profile">
+                <div
+                  class="dropdown-item"
+                  onClick={() => navigate('/profile')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <i class="las la-user fs-18 me-1 align-text-bottom"></i>{' '}
                   Profile
-                </a>
-                <small class="text-muted px-2 py-1 d-block">Settings</small>
-                <a class="dropdown-item" href="pages-profile.html">
-                  <i class="las la-cog fs-18 me-1 align-text-bottom"></i>
-                  Account Settings
-                </a>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="las la-question-circle fs-18 me-1 align-text-bottom"></i>{' '}
-                  Help Center
-                </a>
+                </div>
                 <div class="dropdown-divider mb-0"></div>
-                <a class="dropdown-item text-danger" href="/login">
+                <div
+                  class="dropdown-item text-danger"
+                  onClick={() => navigate('/login')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <i class="las la-power-off fs-18 me-1 align-text-bottom"></i>{' '}
                   Logout
-                </a>
+                </div>
               </div>
             </li>
           </ul>

@@ -6,8 +6,6 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
   const [idService, setIdService] = useState('');
   const [name, setName] = useState('');
   const [retailPrice, setRetailPrice] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [quantitySold, setQuantitySold] = useState('');
   const [costPrice, setCostPrice] = useState('');
 
   useEffect(() => {
@@ -15,8 +13,6 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
       setIdService(servicesData.id || '');
       setName(servicesData.name || '');
       setRetailPrice(servicesData.retailPrice || '');
-      setQuantity(servicesData.quantity || '');
-      setQuantitySold(servicesData.quantitySold);
       setCostPrice(servicesData.costPrice || '');
     }
   }, [servicesData]);
@@ -24,8 +20,6 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('retailPrice', retailPrice);
-    formData.append('quantity', quantity);
-    formData.append('quantitySold', quantitySold);
     formData.append('costPrice', costPrice);
     try {
       await updateFormData('services', idService, formData);
@@ -83,6 +77,21 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
               </div>
             </div>
             <div className="mb-2">
+              <label> Cost Price</label>
+              <div className="input-group">
+                <span className="input-group-text">
+                  <i className="fas fa-dollar-sign"></i>
+                </span>
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="Cost Price"
+                  value={costPrice}
+                  readOnly
+                />
+              </div>
+            </div>
+            <div className="mb-2">
               <label> Retail Price</label>
               <div className="input-group">
                 <span className="input-group-text">
@@ -97,51 +106,6 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
                 />
               </div>
             </div>
-            <div className="mb-2">
-              <label> Cost Price</label>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <i className="fas fa-dollar-sign"></i>
-                </span>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Cost Price"
-                  value={costPrice}
-                  onChange={(e) => setCostPrice(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="mb-2">
-              <label> Quantity</label>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <i className="fas fa-boxes"></i>
-                </span>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Quantity"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="mb-2">
-              <label> Quantity Sold</label>
-              <div className="input-group">
-                <span className="input-group-text">
-                  <i className="fas fa-boxes"></i>
-                </span>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Quantity Sold"
-                  value={quantitySold}
-                  onChange={(e) => setQuantitySold(e.target.value)}
-                />
-              </div>
-            </div>
           </div>
           <div className="modal-footer">
             <button
@@ -153,10 +117,10 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-danger"
               onClick={handleUpdateServices}
             >
-              Save Changes
+              Save
             </button>
           </div>
         </div>

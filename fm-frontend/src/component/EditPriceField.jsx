@@ -163,7 +163,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
               </button>
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-danger"
                 onClick={handleSavePrice}
               >
                 Save

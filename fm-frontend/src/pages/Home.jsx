@@ -1,166 +1,79 @@
 import React from 'react';
 import AddStadium from '../component/AddStadium';
+import { useNavigate } from 'react-router-dom';
 
-function Home() {
+function Home({ selectedStadium, setSelectedStadium, setIsRefresh }) {
+  const navigate = useNavigate();
   return (
     <>
-      <li className="topbar-item">
-        <a
-          href="#"
-          className="badge text-body-tertiary badge-pill"
-          data-bs-toggle="modal"
-          data-bs-target="#addstadium"
-        >
-          <i className="iconoir-plus-circle fs-2"></i>
-        </a>
-      </li>
-      <div class="row justify-content-center">
-        <div class="col-lg-7">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="card  bg-welcome-img overflow-hidden">
-                <div class="card-body">
-                  <div class="">
-                    <h3 class="text-white fw-semibold fs-20 lh-base">
-                      Upgrade you plan for
-                      <br />
-                      Great experience
-                    </h3>
-                    <a href="#" class="btn btn-sm btn-danger">
-                      Upgarde Now
-                    </a>
-                    <img
-                      src="assets/images/extra/fund.png"
-                      alt=""
-                      class=" mb-n4 float-end"
-                      height="107"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card bg-globe-img">
-                <div class="card-body">
-                  <div>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <span class="fs-16 fw-semibold">Balance</span>
-                      <form class="">
-                        <select
-                          id="dynamic-select"
-                          name="example-select"
-                          data-placeholder="Select an option"
-                          data-dynamic-select
-                        >
-                          <option
-                            value="1"
-                            data-img="assets/images/logos/m-card.png"
-                          >
-                            xx25
-                          </option>
-                          <option
-                            value="2"
-                            data-img="assets/images/logos/ame-bank.png"
-                          >
-                            xx56
-                          </option>
-                        </select>
-                      </form>
-                    </div>
-
-                    <h4 class="my-2 fs-24 fw-semibold">
-                      122.5692.00 <small class="font-14">BTC</small>
-                    </h4>
-                    <p class="mb-3 text-muted fw-semibold">
-                      <span class="text-success">
-                        <i class="fas fa-arrow-up me-1"></i>11.1%
-                      </span>{' '}
-                      Outstanding balance boost
+      <button
+        className="badge text-secondary border-0 bg-transparent"
+        data-bs-toggle="modal"
+        data-bs-target="#addstadium"
+      >
+        <i className="iconoir-plus-circle fs-2"></i>
+      </button>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-5 offset-lg-1 align-self-center">
+                  <div class="p-3">
+                    <span class="bg-pink-subtle p-1 rounded text-pink fw-medium">
+                      Quality
+                    </span>
+                    <h1 class="my-4 font-weight-bold">
+                      <span class="text-primary">
+                        Home of your football dreams.
+                      </span>
+                    </h1>
+                    <p class="fs-14 text-muted">
+                      Football is more than just a game — it’s a passion that
+                      connects people across the world. From the roar of the
+                      crowd to the thrill of a last-minute goal, football brings
+                      excitement, unity, and unforgettable memories. Whether
+                      playing on the field or cheering from the sidelines, the
+                      love for the game lives in every heart that beats for
+                      football.
                     </p>
-                    <button type="submit" class="btn btn-soft-primary">
-                      Transfer
-                    </button>
-                    <button type="button" class="btn btn-soft-danger">
-                      Request
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onClick={() => navigate('/stadium5')}
+                    >
+                      Get Started
                     </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Total Revenue
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">$8365.00</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-primary rounded mx-auto">
-                        <i class="iconoir-dollar-circle fs-22 align-self-center mb-0 text-primary"></i>
+                <div class="col-lg-5 offset-lg-1 text-center">
+                  <div
+                    id="carouselExampleSlidesOnly"
+                    class="carousel slide"
+                    data-bs-ride="carousel"
+                    data-bs-interval="2000"
+                  >
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img
+                          src="assets/images/extra/card/img-2.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        New Order
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">722</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-info rounded mx-auto">
-                        <i class="iconoir-cart fs-22 align-self-center mb-0 text-info"></i>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-1.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Sessions
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">181</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-warning rounded mx-auto">
-                        <i class="iconoir-percentage-circle fs-22 align-self-center mb-0 text-warning"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Avg. Order value
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">$1025.50</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-danger rounded mx-auto">
-                        <i class="iconoir-hexagon-dice fs-22 align-self-center mb-0 text-danger"></i>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-3.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
                       </div>
                     </div>
                   </div>
@@ -171,305 +84,100 @@ function Home() {
         </div>
       </div>
 
-      <div class="row justify-content-center">
-        <div class="col-md-12 col-lg-6">
+      <div class="row">
+        <div class="col-12">
           <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Report</h4>
-                </div>
-                <div class="col-auto">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="btn bt btn-light dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <i class="icofont-calendar fs-5 me-1"></i> This Month
-                      <i class="las la-angle-down ms-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">
-                        Today
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Last Week
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Last Month
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        This Year
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div
-                id="reports"
-                class="apex-charts pill-bar"
-                style={{ minHeight: `385px` }}
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Cash Flow</h4>
-                </div>
-
-                <div class="col-auto">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="btn bt btn-light dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <i class="icofont-calendar fs-5 me-1"></i>
-                      Weekly<i class="las la-angle-down ms-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">
-                        Today
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Weekly
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Monthly
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Yearly
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div id="cashflow" class="apex-charts"></div>
+            <div class="card-body">
               <div class="row">
-                <div class="col-4">
-                  <div class="text-center">
-                    <p class="text-muted text-uppercase mb-0 fw-medium fs-13">
-                      Income
-                    </p>
-                    <h5 class="mt-1 mb-0 fw-medium">76%</h5>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="text-center">
-                    <p class="text-muted text-uppercase mb-0 fw-medium fs-13">
-                      Expense
-                    </p>
-                    <h5 class="mt-1 mb-0 fw-medium">23%</h5>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="text-center">
-                    <p class="text-muted text-uppercase mb-0 fw-medium fs-13">
-                      Other
-                    </p>
-                    <h5 class="mt-1 mb-0 fw-medium">1%</h5>
-                  </div>
-                </div>
-              </div>
-              <div class=" text-center mx-auto">
-                <img
-                  src="assets/images/extra/rabit.png"
-                  alt=""
-                  class="d-inline-block"
-                  height="105"
-                />
-              </div>
-              <div class="card-bg position-relative z-0">
-                <div class="p-3 bg-primary-subtle rounded position-relative">
-                  <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-primary-subtle text-primary thumb-lg rounded-circle">
-                      <i class="iconoir-bright-star fs-3"></i>
+                <div class="col-lg-5 text-center">
+                  <div
+                    id="carouselExample"
+                    class="carousel slide"
+                    data-bs-ride="carousel"
+                    data-bs-interval="2000"
+                  >
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img
+                          src="assets/images/extra/card/img-4.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-5.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-6.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-7.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
                     </div>
-                    <div class="flex-grow-1 ms-2">
-                      <h6 class="my-0 fw-normal text-dark fs-13 mb-0">
-                        You have $1.53 remaining found over ...
-                        <a
-                          href="#"
-                          class="text-primary fw-medium mb-0 text-decoration-underline"
-                        >
-                          View Details
-                        </a>
-                      </h6>
-                    </div>
+                    <button
+                      class="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#carouselExample"
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      class="carousel-control-next"
+                      type="button"
+                      data-bs-target="#carouselExample"
+                      data-bs-slide="next"
+                    >
+                      <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Exchange Rate</h4>
-                </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div class="table-responsive">
-                <table class="table mb-0">
-                  <tbody>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/us_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">USA</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.835230{' '}
-                          <span class="badge rounded text-success bg-success-subtle">
-                            1.10%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/spain_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">Spain</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.896532{' '}
-                          <span class="badge rounded text-success bg-success-subtle">
-                            0.91%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/french_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">French</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.875433{' '}
-                          <span class="badge rounded text-danger bg-danger-subtle">
-                            0.11%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/germany_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">Germany</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.795621{' '}
-                          <span class="badge rounded text-success bg-success-subtle">
-                            0.85%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/french_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">French</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.875433{' '}
-                          <span class="badge rounded text-danger bg-danger-subtle">
-                            0.11%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0 pb-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/flags/baha_flag.jpg"
-                            class="me-2 align-self-center thumb-sm rounded-circle"
-                            alt="..."
-                          />
-                          <h6 class="m-0 text-truncate">Bahamas</h6>
-                        </div>
-                      </td>
-                      <td class="px-0 pb-0 text-end">
-                        <span class="text-body ps-2 align-self-center text-end fw-medium">
-                          0.845236{' '}
-                          <span class="badge rounded text-danger bg-danger-subtle">
-                            0.22%
-                          </span>
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <hr class="hr-dashed" />
-              <div class="row">
-                <div class="col-lg-6 text-center">
-                  <div class="p-2 border-dashed border-theme-color rounded">
-                    <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                      Higher Rate
+                <div class="col-lg-5 offset-lg-1 align-self-center">
+                  <div class="p-3">
+                    <span class="bg-pink-subtle p-1 rounded text-pink fw-medium">
+                      Contact
+                    </span>
+                    <h1 class="my-4 font-weight-bold">
+                      <span class="text-primary">
+                        Find rivals easily – Play right away.
+                      </span>
+                    </h1>
+                    <p class="fs-14 text-muted">
+                      Our “Find Opponent” feature helps players quickly connect
+                      with others looking for a match. Whether you're missing
+                      players or searching for a rival team, this function
+                      allows you to set up games effortlessly. With just a few
+                      clicks, you can match with available teams, confirm the
+                      time, and head straight to the field. No more waiting or
+                      searching – let the game begin!
                     </p>
-                    <h5 class="mt-1 mb-0 fw-medium text-success">0.833658</h5>
-                    <small>05 Sep 2024</small>
-                  </div>
-                </div>
-                <div class="col-lg-6 text-center">
-                  <div class="p-2 border-dashed border-theme-color rounded">
-                    <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                      Lower Rate
-                    </p>
-                    <h5 class="mt-1 mb-0 fw-medium text-danger">0.812547</h5>
-                    <small>05 Sep 2024</small>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onClick={() => navigate('/matching')}
+                    >
+                      Get Started
+                    </button>
                   </div>
                 </div>
               </div>
@@ -478,468 +186,324 @@ function Home() {
         </div>
       </div>
 
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-3 order-2 order-lg-1">
+      <div class="row">
+        <div class="col-12">
           <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Balance Details</h4>
-                </div>
-                <div class="col-auto">
-                  <div class="p-2 border-dashed border-theme-color rounded">
-                    <h5 class="mt-1 mb-0 fw-medium">$82365.00</h5>
-                    <small class="text-muted">Available</small>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-5 offset-lg-1 align-self-center">
+                  <div class="p-3">
+                    <span class="bg-pink-subtle p-1 rounded text-pink fw-medium">
+                      Captions{' '}
+                    </span>
+                    <h1 class="my-4 font-weight-bold">
+                      Manage Your Work With{' '}
+                      <span class="text-primary">Approx</span>.
+                    </h1>
+                    <p class="fs-14 text-muted">
+                      Approx is a Bootstrap 5 admin dashboard, It is fully
+                      responsive and included awesome features to help build web
+                      applications fast and easy.
+                    </p>
+                    <button type="button" class="btn btn-primary">
+                      Get Started
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div id="balance" class="apex-charts"></div>
-              <div class="bg-light py-3 px-2 mb-0 mt-3 text-center rounded">
-                <h6 class="mb-0">
-                  <i class="icofont-calendar fs-5 me-1"></i> 01 January 2024 to
-                  31 December 2024
-                </h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12 col-lg-6 order-1 order-lg-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Transaction History</h4>
-                </div>
-                <div class="col-auto">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="btn bt btn-light dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <i class="icofont-calendar fs-5 me-1"></i> This Month
-                      <i class="las la-angle-down ms-1"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="#">
-                        Today
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Last Week
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        Last Month
-                      </a>
-                      <a class="dropdown-item" href="#">
-                        This Year
-                      </a>
+                <div class="col-lg-5 offset-lg-1 text-center">
+                  <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="carousel-indicators">
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="0"
+                        class="active"
+                        aria-current="true"
+                        aria-label="Slide 1"
+                      ></button>
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="1"
+                        aria-label="Slide 2"
+                      ></button>
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide-to="2"
+                        aria-label="Slide 3"
+                      ></button>
                     </div>
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img
+                          src="assets/images/extra/card/img-4.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-5.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-6.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                    </div>
+                    <button
+                      class="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#carouselExampleIndicators"
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      class="carousel-control-next"
+                      type="button"
+                      data-bs-target="#carouselExampleIndicators"
+                      data-bs-slide="next"
+                    >
+                      <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div class="table-responsive">
-                <table class="table mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <th class="border-top-0">Transaction</th>
-                      <th class="border-top-0">Date</th>
-                      <th class="border-top-0">AApprox</th>
-                      <th class="border-top-0">Status</th>
-                      <th class="border-top-0">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/logos/lang-logo/chatgpt.png"
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0">Chat Gpt</h6>
-                            <a href="#" class="fs-12 text-primary">
-                              ID: A3652
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>20 july 2024</td>
-                      <td>$560</td>
-                      <td>
-                        <span class="badge bg-success-subtle text-success fs-11 fw-medium px-2">
-                          Successful
-                        </span>
-                      </td>
-                      <td>
-                        <a href="#">
-                          <i class="las la-print text-secondary fs-18"></i>
-                        </a>
-                        <a href="#">
-                          <i class="las la-trash-alt text-secondary fs-18"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/logos/lang-logo/gitlab.png"
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0">Gitlab</h6>
-                            <a href="#" class="fs-12 text-primary">
-                              ID: B5784
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>09 July 2024</td>
-                      <td>$2350</td>
-                      <td>
-                        <span class="badge bg-warning-subtle text-warning fs-11 fw-medium px-2">
-                          Pending
-                        </span>
-                      </td>
-                      <td>
-                        <a href="#">
-                          <i class="las la-print text-secondary fs-18"></i>
-                        </a>
-                        <a href="#">
-                          <i class="las la-trash-alt text-secondary fs-18"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/logos/lang-logo/nextjs.png"
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0">Nextjs</h6>
-                            <a href="#" class="fs-12 text-primary">
-                              ID: C9632
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>02 June 2024</td>
-                      <td>$2200</td>
-                      <td>
-                        <span class="badge bg-success-subtle text-success fs-11 fw-medium px-2">
-                          Successful
-                        </span>
-                      </td>
-                      <td>
-                        <a href="#">
-                          <i class="las la-print text-secondary fs-18"></i>
-                        </a>
-                        <a href="#">
-                          <i class="las la-trash-alt text-secondary fs-18"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/logos/lang-logo/vue.png"
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0">Vue</h6>
-                            <a href="#" class="fs-12 text-primary">
-                              ID: D8596
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>28 MAY 2024</td>
-                      <td>$1320</td>
-                      <td>
-                        <span class="badge bg-danger-subtle text-danger fs-11 fw-medium px-2">
-                          Cancle
-                        </span>
-                      </td>
-                      <td>
-                        <a href="#">
-                          <i class="las la-print text-secondary fs-18"></i>
-                        </a>
-                        <a href="#">
-                          <i class="las la-trash-alt text-secondary fs-18"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/logos/lang-logo/symfony.png"
-                            height="40"
-                            class="me-3 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0">Symfony</h6>
-                            <a href="#" class="fs-12 text-primary">
-                              ID: E7778
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td>15 May 2024</td>
-                      <td>$3650</td>
-                      <td>
-                        <span class="badge bg-success-subtle text-success fs-11 fw-medium px-2">
-                          Successful
-                        </span>
-                      </td>
-                      <td>
-                        <a href="#">
-                          <i class="las la-print text-secondary fs-18"></i>
-                        </a>
-                        <a href="#">
-                          <i class="las la-trash-alt text-secondary fs-18"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3 order-3 order-lg-3">
-          <div class="card">
-            <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h4 class="card-title">Send Money</h4>
-                </div>
-                <div class="col-auto">
-                  <div class="dropdown">
-                    <a href="#" class="btn bt btn-light">
-                      <i class="icofont-contact-add fs-5 me-1"></i> Add Member
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div class="table-responsive">
-                <table class="table mb-0">
-                  <tbody>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-1.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Scott Holland</h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #3652
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $3325.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-2.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Karen Savage</h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #4789
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $2548.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-3.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Steven Sharp </h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #4521
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $2985.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-4.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Teresa Himes </h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #3269
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $1845.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-5.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Ralph Denton</h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #4521
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $1422.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="px-0">
-                        <div class="d-flex align-items-center">
-                          <img
-                            src="assets/images/users/avatar-9.jpg"
-                            height="36"
-                            class="me-2 align-self-center rounded"
-                            alt="..."
-                          />
-                          <div class="flex-grow-1 text-truncate">
-                            <h6 class="m-0 text-truncate">Steven Sharp </h6>
-                            <a
-                              href="#"
-                              class="font-12 text-muted text-decoration-underline"
-                            >
-                              #4521
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="px-0 text-end">
-                        <span class="text-primary ps-2 align-self-center text-end fw-medium">
-                          $2985.00
-                        </span>
-                      </td>
-                      <td class="px-0 text-end">
-                        <a href="#" class="text-body">
-                          <i class="las la-sync-alt"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <AddStadium/>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-5 text-center">
+                  <div
+                    id="carouselExampleFade"
+                    class="carousel slide carousel-fade"
+                    data-bs-ride="carousel"
+                  >
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img
+                          src="assets/images/extra/card/img-6.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-1.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-3.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                      </div>
+                    </div>
+                    <a
+                      class="carousel-control-prev"
+                      href="#carouselExampleFade"
+                      role="button"
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a
+                      class="carousel-control-next"
+                      href="#carouselExampleFade"
+                      role="button"
+                      data-bs-slide="next"
+                    >
+                      <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Next</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1 align-self-center">
+                  <div class="p-3">
+                    <span class="bg-pink-subtle p-1 rounded text-pink fw-medium">
+                      Crossfade
+                    </span>
+                    <h1 class="my-4 font-weight-bold">
+                      Manage Your Work With{' '}
+                      <span class="text-primary">Approx</span>.
+                    </h1>
+                    <p class="fs-14 text-muted">
+                      Approx is a Bootstrap 5 admin dashboard, It is fully
+                      responsive and included awesome features to help build web
+                      applications fast and easy.
+                    </p>
+                    <button type="button" class="btn btn-primary">
+                      Get Started
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-5 offset-lg-1 align-self-center">
+                  <div class="p-3">
+                    <span class="bg-pink-subtle p-1 rounded text-pink fw-medium">
+                      Dark variant{' '}
+                    </span>
+                    <h1 class="my-4 font-weight-bold">
+                      Manage Your Work With{' '}
+                      <span class="text-primary">Approx</span>.
+                    </h1>
+                    <p class="fs-14 text-muted">
+                      Approx is a Bootstrap 5 admin dashboard, It is fully
+                      responsive and included awesome features to help build web
+                      applications fast and easy.
+                    </p>
+                    <button type="button" class="btn btn-primary">
+                      Get Started
+                    </button>
+                  </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1 text-center">
+                  <div
+                    id="carouselExampleDark"
+                    class="carousel carousel-dark slide"
+                  >
+                    <div class="carousel-indicators">
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleDark"
+                        data-bs-slide-to="0"
+                        class="active"
+                        aria-current="true"
+                        aria-label="Slide 1"
+                      ></button>
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleDark"
+                        data-bs-slide-to="1"
+                        aria-label="Slide 2"
+                      ></button>
+                      <button
+                        type="button"
+                        data-bs-target="#carouselExampleDark"
+                        data-bs-slide-to="2"
+                        aria-label="Slide 3"
+                      ></button>
+                    </div>
+                    <div class="carousel-inner">
+                      <div
+                        class="carousel-item active"
+                        data-bs-interval="10000"
+                      >
+                        <img
+                          src="assets/images/extra/card/img-5.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                        <div class="carousel-caption d-none d-md-block">
+                          <h5>First slide label</h5>
+                          <p>
+                            Some representative placeholder content for the
+                            first slide.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="carousel-item" data-bs-interval="2000">
+                        <img
+                          src="assets/images/extra/card/img-4.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                        <div class="carousel-caption d-none d-md-block">
+                          <h5>Second slide label</h5>
+                          <p>
+                            Some representative placeholder content for the
+                            second slide.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <img
+                          src="assets/images/extra/card/img-6.jpg"
+                          class="d-block w-100"
+                          alt="..."
+                        />
+                        <div class="carousel-caption d-none d-md-block">
+                          <h5>Third slide label</h5>
+                          <p>
+                            Some representative placeholder content for the
+                            third slide.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      class="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#carouselExampleDark"
+                      data-bs-slide="prev"
+                    >
+                      <span
+                        class="carousel-control-prev-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      class="carousel-control-next"
+                      type="button"
+                      data-bs-target="#carouselExampleDark"
+                      data-bs-slide="next"
+                    >
+                      <span
+                        class="carousel-control-next-icon"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <AddStadium setIsRefresh={setIsRefresh} />
     </>
   );
 }
