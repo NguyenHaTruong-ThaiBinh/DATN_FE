@@ -26,7 +26,7 @@ function PaymentSuccess() {
   }, [location.search]);
 
   const handleBackHome = () => {
-    navigate('/');
+    navigate('/history_booking');
   };
 
   return (

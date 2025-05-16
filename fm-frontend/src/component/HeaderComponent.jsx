@@ -224,7 +224,7 @@ const HeaderComponent = ({
                 <div class="dropdown-divider mb-0"></div>
                 <div
                   class="dropdown-item text-danger"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/')}
                   style={{ cursor: 'pointer' }}
                 >
                   <i class="las la-power-off fs-18 me-1 align-text-bottom"></i>{' '}

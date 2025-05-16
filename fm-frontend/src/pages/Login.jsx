@@ -1,10 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+import { postLogin } from '../API/Api';
 
 function Login() {
   const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [pwd, setPwd] = useState('');
+  const handleLogin = async () => {
+    if (!name || !pwd) {
+      toast.error('Please fill in all information!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('password', pwd);
+
+    try {
+      await postLogin('authentication', formData);
+      toast.success('Login successful!');
+      setTimeout(() => {
+        navigate('/home');
+      }, 2000);
+    } catch (error) {
+      console.error('Error: ', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('An unexpected error occurred!');
+      }
+    }
+  };
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <div class="container-xxl">
         <div class="row vh-100 d-flex justify-content-center">
           <div class="col-12 align-self-center">
@@ -44,6 +84,8 @@ function Login() {
                             class="form-control"
                             id="username"
                             name="username"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             placeholder="Enter username"
                           />
                         </div>
@@ -57,6 +99,8 @@ function Login() {
                             name="password"
                             id="userpassword"
                             placeholder="Enter password"
+                            value={pwd}
+                            onChange={(e) => setPwd(e.target.value)}
                           />
                         </div>
 
@@ -91,7 +135,11 @@ function Login() {
                         <div class="form-group mb-0 row">
                           <div class="col-12">
                             <div class="d-grid mt-3">
-                              <button class="btn btn-primary" type="button">
+                              <button
+                                class="btn btn-primary"
+                                type="button"
+                                onClick={handleLogin}
+                              >
                                 Log In <i class="fas fa-sign-in-alt ms-1"></i>
                               </button>
                             </div>

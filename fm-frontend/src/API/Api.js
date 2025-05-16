@@ -25,6 +25,15 @@ export const postPayFromData = (endpoint, formData) => {
   });
 };
 
+//Login
+export const postLogin = (endpoint, formData) => {
+  return axios.post(`${API_BASE_URL}/${endpoint}/login`, formData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  });
+};
+
 //put
 export const updateFormData = (endpoint, id, formData) => {
   return axios.put(`${API_BASE_URL}/${endpoint}/${id}`, formData, {

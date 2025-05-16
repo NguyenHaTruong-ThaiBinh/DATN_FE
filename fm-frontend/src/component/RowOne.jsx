@@ -10,7 +10,7 @@ function RowOne({ title }) {
             <div className="">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
-                  <a href="/">HaTruong</a>
+                  <a href="/home">HaTruong</a>
                 </li>
                 <li className="breadcrumb-item active">{title}</li>
               </ol>

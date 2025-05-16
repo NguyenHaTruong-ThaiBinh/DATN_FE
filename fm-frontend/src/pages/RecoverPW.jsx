@@ -19,7 +19,7 @@ function RecoverPW() {
       await postFormData('email', formData);
       toast.success('New password send via Email!');
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 2000);
     } catch (error) {
       console.error('Error: ', error); // Log chi tiết để dev xem
@@ -104,7 +104,7 @@ function RecoverPW() {
                         <p className="text-muted">
                           Remember It?{' '}
                           <span
-                            onClick={() => navigate('/login')}
+                            onClick={() => navigate('/')}
                             className="text-primary ms-2"
                             style={{ cursor: 'pointer' }}
                           >

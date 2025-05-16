@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -32,7 +32,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App component={Home} title="Home" />} />
+        <Route path="/home" element={<App component={Home} title="Home" />} />
         <Route path="/stadium5" element={<Stadium5 />} />
         <Route path="/stadium11" element={<Stadium11 />} />
         <Route
@@ -75,7 +75,7 @@ root.render(
         />
         <Route path="/service" element={<Service />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/recover_pw" element={<RecoverPW />} />
       </Routes>

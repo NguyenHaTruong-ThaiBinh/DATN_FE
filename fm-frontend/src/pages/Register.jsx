@@ -50,7 +50,7 @@ function Register() {
       setPassword('');
       setConfirm('');
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 1500);
     } catch (error) {
       toast.error(`${error.response.data.message}`);
@@ -186,7 +186,7 @@ function Register() {
                         <p className="text-muted">
                           Already have an account?{' '}
                           <button
-                            onClick={() => navigate('/login')}
+                            onClick={() => navigate('/')}
                             className="btn btn-link text-primary ms-2"
                             style={{ textDecoration: 'none' }}
                           >

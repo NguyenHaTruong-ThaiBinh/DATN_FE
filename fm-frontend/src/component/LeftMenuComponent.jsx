@@ -52,11 +52,11 @@ const LeftMenuComponent = () => {
 
                 {/* Home */}
                 <li
-                  className={`nav-item ${activeMenu === '/' ? 'active' : ''}`}
+                  className={`nav-item ${activeMenu === '/home' ? 'active' : ''}`}
                 >
                   <div
-                    className={`nav-link ${activeMenu === '/' ? 'active' : ''}`}
-                    onClick={() => navigate('/')}
+                    className={`nav-link ${activeMenu === '/home' ? 'active' : ''}`}
+                    onClick={() => navigate('/home')}
                   >
                     <i className="iconoir-home menu-icon"></i>
                     <span>Home</span>
