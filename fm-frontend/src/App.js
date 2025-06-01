@@ -7,8 +7,10 @@ import RowOne from './component/RowOne';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Outlet } from 'react-router-dom';
+import PrivateRoutes from './routes/PrivateRoutes';
 
-function App({ component: Component, title }) {
+function App() {
   const [sidebarSize, setSidebarSize] = useState('default');
   const [selectedStadium, setSelectedStadium] = useState(null); // Thêm state
   const [isRefresh, setIsRefresh] = useState(false);
@@ -29,30 +31,32 @@ function App({ component: Component, title }) {
         autoClose={3000}
         hideProgressBar={false}
       />
-      <HeaderComponent
-        onToggleMenu={toggleMenu}
-        selectedStadium={selectedStadium}
-        setSelectedStadium={setSelectedStadium}
-        isRefresh={isRefresh}
-      />
-      <LeftMenuComponent />
-      <div className="startbar-overlay d-print-none"></div>
-      <div className="page-wrapper">
-        <div className="page-content">
-          <div className="container-fluid">
-            <RowOne title={title} />
-            {Component && (
-              <Component
-                selectedStadium={selectedStadium}
-                setSelectedStadium={setSelectedStadium}
-                setIsRefresh={setIsRefresh}
+      <PrivateRoutes>
+        <HeaderComponent
+          onToggleMenu={toggleMenu}
+          selectedStadium={selectedStadium}
+          setSelectedStadium={setSelectedStadium}
+          isRefresh={isRefresh}
+        />
+        <LeftMenuComponent />
+        <div className="startbar-overlay d-print-none"></div>
+        <div className="page-wrapper">
+          <div className="page-content">
+            <div className="container-fluid">
+              <RowOne />
+              <Outlet
+                context={{
+                  selectedStadium,
+                  setSelectedStadium,
+                  setIsRefresh,
+                }}
               />
-            )}
+            </div>
+            <Offcanvas />
+            <FooterComponent />
           </div>
-          <Offcanvas />
-          <FooterComponent />
         </div>
-      </div>
+      </PrivateRoutes>
     </>
   );
 }

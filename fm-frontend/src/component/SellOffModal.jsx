@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchDataById, postFormData } from '../API/Api';
+import Cookies from 'js-cookie'
 
 function SellOffModal({ selectedReport, setIsRefresh }) {
   const [quantity, setQuantity] = useState('');
@@ -12,7 +13,7 @@ function SellOffModal({ selectedReport, setIsRefresh }) {
   const [note, setNote] = useState('');
 
   //lấy idUser trên localstorage
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
   const [user, setUser] = useState([]);
   //lấy thông tin của User
   useEffect(() => {

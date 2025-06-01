@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaClipboardList } from 'react-icons/fa';
 import { fetchDataById, getDataByIdStadium, postFormData } from '../API/Api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 
 function AddReport({ selectedStadium, setIsRefresh, isRefresh }) {
   const [listField, setListField] = useState([]);
@@ -13,7 +14,7 @@ function AddReport({ selectedStadium, setIsRefresh, isRefresh }) {
   const [quantity, setQuantity] = useState('');
   const today = new Date().toISOString().split('T')[0];
   const [user, setUser] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   //lấy thông tin của User
   useEffect(() => {

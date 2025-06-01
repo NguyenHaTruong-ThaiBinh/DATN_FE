@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-import { postFormData } from '../API/Api';
+import { recvPwd } from '../API/Api';
 import { useNavigate } from 'react-router-dom';
 
 function RecoverPW() {
@@ -16,7 +15,7 @@ function RecoverPW() {
     const formData = new FormData();
     formData.append('email', email);
     try {
-      await postFormData('email', formData);
+      await recvPwd('email', formData);
       toast.success('New password send via Email!');
       setTimeout(() => {
         navigate('/');
@@ -36,11 +35,6 @@ function RecoverPW() {
   };
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-      />
       <div class="container-xxl">
         <div class="row vh-100 d-flex justify-content-center">
           <div class="col-12 align-self-center">

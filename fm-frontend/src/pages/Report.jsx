@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../redux/slice/TitleSlice';
 import {
   fetchDataById,
   getListInvoiceByDay,
+  getRefundByIdStadium,
   getTotalPriceInvoiceByDay,
   getTotalServiceMontly,
+  updateRefund,
 } from '../API/Api';
+import { useOutletContext } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
+function Report() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Report'));
+  }, [dispatch]);
+  const { selectedStadium } = useOutletContext();
+
   const [idStadium, setIdStadium] = useState('');
   const [listRevenue, setListRevenue] = useState([]);
   const [listServiceMonthly, setListServiceMonthly] = useState([]);
@@ -16,11 +28,18 @@ function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
   const [listInvoice, setListInvoice] = useState([]);
   const [totalPrice, setTotalPrice] = useState('');
   const [day, setDay] = useState('');
+  const [listRefund, setListRefund] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
+  useEffect(() => {
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
+    setDay(formattedDate);
+  }, []);
   //lấy id Stadium
   useEffect(() => {
     if (selectedStadium) {
-      setIdStadium(selectedStadium.idStadium);
+      setIdStadium(selectedStadium?.idStadium);
     }
   }, [selectedStadium]);
   //lấy doanh thu theo từng tháng
@@ -35,6 +54,18 @@ function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
         });
     }
   }, [idStadium]);
+  //lấy danh sách refund
+  useEffect(() => {
+    if (idStadium) {
+      getRefundByIdStadium('booking', idStadium)
+        .then((respone) => {
+          setListRefund(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idStadium, refresh]);
   //lấy tiền nhập dịch vụ theo tháng
   useEffect(() => {
     if (idStadium) {
@@ -114,164 +145,26 @@ function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
         });
     }
   }, [idStadium]);
+  //handle
+  const handleUpdateRefund = async (idBooking) => {
+    try {
+      await updateRefund('booking', idBooking);
+      setRefresh((prev) => !prev);
+      toast.success('Successfull!');
+    } catch (error) {
+      console.error('Lỗi cập nhật:', error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      }
+    }
+  };
   return (
     <>
-      <div class="row justify-content-center">
-        <div class="col-lg-7">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="card  bg-welcome-img overflow-hidden">
-                <div class="card-body">
-                  <div class="">
-                    <h3 class="text-white fw-semibold fs-20 lh-base">
-                      Upgrade you plan for
-                      <br />
-                      Great experience
-                    </h3>
-                    <a href="#" class="btn btn-sm btn-danger">
-                      Upgarde Now
-                    </a>
-                    <img
-                      src="assets/images/extra/fund.png"
-                      alt=""
-                      class=" mb-n4 float-end"
-                      height="107"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card bg-globe-img">
-                <div class="card-body">
-                  <div>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <span class="fs-16 fw-semibold">Balance</span>
-                      <form class="">
-                        <select
-                          id="dynamic-select"
-                          name="example-select"
-                          data-placeholder="Select an option"
-                          data-dynamic-select
-                        >
-                          <option
-                            value="1"
-                            data-img="assets/images/logos/m-card.png"
-                          >
-                            xx25
-                          </option>
-                          <option
-                            value="2"
-                            data-img="assets/images/logos/ame-bank.png"
-                          >
-                            xx56
-                          </option>
-                        </select>
-                      </form>
-                    </div>
-
-                    <h4 class="my-2 fs-24 fw-semibold">
-                      122.5692.00 <small class="font-14">BTC</small>
-                    </h4>
-                    <p class="mb-3 text-muted fw-semibold">
-                      <span class="text-success">
-                        <i class="fas fa-arrow-up me-1"></i>11.1%
-                      </span>{' '}
-                      Outstanding balance boost
-                    </p>
-                    <button type="submit" class="btn btn-soft-primary">
-                      Transfer
-                    </button>
-                    <button type="button" class="btn btn-soft-danger">
-                      Request
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-5">
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Total Revenue
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">$8365.00</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-primary rounded mx-auto">
-                        <i class="iconoir-dollar-circle fs-22 align-self-center mb-0 text-primary"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        New Order
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">722</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-info rounded mx-auto">
-                        <i class="iconoir-cart fs-22 align-self-center mb-0 text-info"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Sessions
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">181</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-warning rounded mx-auto">
-                        <i class="iconoir-percentage-circle fs-22 align-self-center mb-0 text-warning"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 col-lg-6">
-              <div class="card bg-corner-img">
-                <div class="card-body">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-9">
-                      <p class="text-muted text-uppercase mb-0 fw-normal fs-13">
-                        Avg. Order value
-                      </p>
-                      <h4 class="mt-1 mb-0 fw-medium">$1025.50</h4>
-                    </div>
-                    <div class="col-3 align-self-center">
-                      <div class="d-flex justify-content-center align-items-center thumb-md border-dashed border-danger rounded mx-auto">
-                        <i class="iconoir-hexagon-dice fs-22 align-self-center mb-0 text-danger"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-6">
           <div class="card">
@@ -346,7 +239,6 @@ function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
           </div>
         </div>
       </div>
-
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-6">
           <div class="card">
@@ -466,35 +358,33 @@ function Report({ selectedStadium, setSelectedStadium, setIsRefresh }) {
             </div>
             <div class="card-body pt-0">
               <div class="table-responsive-sm">
-                <table class="table mb-0">
+                <table class="table mb-0 text-center">
                   <caption>List of users</caption>
                   <thead class="table-light">
                     <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">First Name</th>
-                      <th scope="col">Last Name</th>
-                      <th scope="col">Username</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Mobile.No</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
+                    {listRefund.map((refund, index) => (
+                      <tr key={index}>
+                        <td>{refund.name}</td>
+                        <td>{refund.phoneNumber}</td>
+                        <td>
+                          {Number(refund.totalPrice).toLocaleString()}
+                          &nbsp;VND
+                        </td>
+                        <td>
+                          <i
+                            className="las la-trash text-secondary fs-18"
+                            onClick={() => handleUpdateRefund(refund.idBooking)}
+                          ></i>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

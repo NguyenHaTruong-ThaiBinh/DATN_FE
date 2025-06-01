@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { changePassword, fetchDataById, updateFormData } from '../API/Api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../redux/slice/TitleSlice';
 
 function Profile() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Profile'));
+  }, [dispatch]);
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -13,7 +20,7 @@ function Profile() {
   const [newPwd, setNewPwd] = useState('');
   const [confirm, setConfirm] = useState('');
   const [password, setPassword] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
   //lấy thông tin User theo idUser
   useEffect(() => {
     if (idUser) {
@@ -37,26 +44,25 @@ function Profile() {
   //update infor user
   const handleUpdate = async () => {
     if (!name || !phoneNumber || !email) {
-      toast.warning('Error');
+      toast.warning('Please enter complete information!');
       return;
     }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('phoneNumber', phoneNumber);
     formData.append('email', email);
+
     try {
       await updateFormData('users', idUser, formData);
-      toast.success('Update Success');
+      toast.success('Update successful!');
       setRefresh((prev) => !prev);
     } catch (error) {
-      toast.error('Error Update:', error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        toast.error(error.response.data.message);
-      }
+      console.error('Error:', error); // Log lỗi chi tiết cho dev
+
+      const message = error?.response?.data?.message || 'Error';
+
+      toast.error(message);
     }
   };
   //handle change pwd
@@ -108,7 +114,7 @@ function Profile() {
                   <div className="d-flex align-items-center">
                     <div className="position-relative">
                       <img
-                        src="assets/images/users/avatar-5.jpg"
+                        src="assets/images/users/avatar-1.jpg"
                         alt=""
                         className="rounded-circle img-fluid"
                       />
@@ -143,8 +149,6 @@ function Profile() {
             </div>
           </div>
         </div>
-
-        {/* Settings Section (Always Visible) */}
         <div className="col-md-8">
           <div className="card">
             <div className="card-header">
@@ -238,12 +242,6 @@ function Profile() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div
-                    onClick={() => navigate('/recover_pw')}
-                    className="text-primary font-12 cursor-pointer"
-                  >
-                    Forgot password?
-                  </div>
                 </div>
               </div>
               <div className="form-group mb-3 row">

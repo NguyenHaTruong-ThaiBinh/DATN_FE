@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../redux/slice/TitleSlice';
 import {
   fetchData,
   fetchDataByIdStadiumAndIdTypeAndEnable,
   getBookingByIdField,
 } from '../API/Api';
 import { toast } from 'react-toastify';
+import { useOutletContext } from 'react-router-dom';
 
-function Calendar({ selectedStadium, setSelectedStadium, setIsRefresh }) {
+function Calendar() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Calendar'));
+  }, [dispatch]);
+  const { selectedStadium } = useOutletContext();
   const [listType, setListType] = useState([]);
   const [selectedType, setSelectedType] = useState('');
   const [idStadium, setIdStadium] = useState('');

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 import { updateEnableByUser } from '../API/Api';
 
 function ModalRemoveMatching({ matchingData, setIsRefresh }) {
   const [idMatching, setIdMatching] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   useEffect(() => {
     if (matchingData) {

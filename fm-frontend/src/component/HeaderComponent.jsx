@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { fetchData, fetchDataById } from '../API/Api';
+import { useState, useEffect } from 'react';
+import { fetchData, fetchDataById, postLogout } from '../API/Api';
 import { useNavigate } from 'react-router-dom';
 import Notifications from './Notifications';
 import { Client } from '@stomp/stompjs';
 import { toast } from 'react-toastify';
 import SockJS from 'sockjs-client';
+import Cookies from 'js-cookie';
 
 const HeaderComponent = ({
   onToggleMenu,
@@ -14,9 +15,55 @@ const HeaderComponent = ({
 }) => {
   const [stadiums, setStadiums] = useState([]);
   const navigate = useNavigate();
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
+  const token = Cookies.get('token');
+  const [user, setUser] = useState('');
   const [listNotification, setListNotification] = useState([]);
-  const [Fresh, setFresh] = useState(false);
+  const [fresh, setFresh] = useState(false);
+
+  //handleLogout
+  const handleLogout = async () => {
+    if (!token) {
+      // Nếu không có token thì vẫn xóa role và điều hướng
+      Cookies.remove('role');
+      Cookies.remove('token');
+      navigate('/', { replace: true });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('token', token);
+
+    try {
+      const response = await postLogout('authentication', formData);
+
+      if (response.data.code === 200) {
+        Cookies.remove('role');
+        Cookies.remove('token');
+
+        toast.success('Logout successful!');
+
+        setTimeout(() => {
+          navigate('/', { replace: true });
+        }, 500);
+      }
+    } catch (error) {
+      console.error('Logout error: ', error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('An unexpected error occurred!');
+      }
+      Cookies.remove('role');
+      Cookies.remove('token');
+      navigate('/', { replace: true });
+    }
+  };
 
   useEffect(() => {
     const client = new Client({
@@ -55,9 +102,9 @@ const HeaderComponent = ({
           console.error(err);
         });
     }
-  }, [idUser]);
+  }, [idUser, fresh]);
 
-  //lấy danh sách sânsân
+  //lấy danh sách sân
   useEffect(() => {
     fetchData('stadium')
       .then((response) => {
@@ -71,6 +118,19 @@ const HeaderComponent = ({
         console.error('Error:', error);
       });
   }, [isRefresh]);
+
+  //lấy User theo idUser
+  useEffect(() => {
+    if (idUser) {
+      fetchDataById('users', idUser)
+        .then((respone) => {
+          setUser(respone.data.result);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [idUser]);
 
   const handleStadiumChange = (stadium) => {
     setSelectedStadium(stadium);
@@ -146,7 +206,10 @@ const HeaderComponent = ({
                 <i class="iconoir-bell"></i>
                 <span class="alert-badge"></span>
               </div>
-              <div class="dropdown-menu stop dropdown-menu-end dropdown-lg py-0">
+              <div
+                class="dropdown-menu stop dropdown-menu-end dropdown-lg py-0"
+                style={{ width: '400px' }}
+              >
                 <h5 class="dropdown-item-text m-0 py-3 d-flex justify-content-between align-items-center">
                   Notifications{' '}
                 </h5>
@@ -205,10 +268,8 @@ const HeaderComponent = ({
                     />
                   </div>
                   <div class="flex-grow-1 ms-2 text-truncate align-self-center">
-                    <h6 class="my-0 fw-medium text-dark fs-13">
-                      William Martin
-                    </h6>
-                    <small class="text-muted mb-0">Front End Developer</small>
+                    <h6 class="my-0 fw-medium text-dark fs-13">{user.name}</h6>
+                    <small class="text-muted mb-0">{user.nameRole}</small>
                   </div>
                 </div>
                 <div class="dropdown-divider mt-0"></div>
@@ -224,7 +285,7 @@ const HeaderComponent = ({
                 <div class="dropdown-divider mb-0"></div>
                 <div
                   class="dropdown-item text-danger"
-                  onClick={() => navigate('/')}
+                  onClick={() => handleLogout()}
                   style={{ cursor: 'pointer' }}
                 >
                   <i class="las la-power-off fs-18 me-1 align-text-bottom"></i>{' '}

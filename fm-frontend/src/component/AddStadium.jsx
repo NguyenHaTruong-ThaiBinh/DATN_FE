@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { postFormData } from '../API/Api';
+import { useState, useEffect } from 'react';
+import { fetchData, postFormData } from '../API/Api';
 import { toast } from 'react-toastify';
 
 function AddStadium({ setIsRefresh }) {
@@ -8,6 +8,8 @@ function AddStadium({ setIsRefresh }) {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [listDistrict, setListDistrict] = useState([]);
+  const [district, setDistrict] = useState('');
 
   const resetForm = () => {
     setImage(null);
@@ -25,8 +27,18 @@ function AddStadium({ setIsRefresh }) {
     }
   };
 
+  //lấy danh sách quận
+  useEffect(() => {
+    fetchData('district')
+      .then((respone) => {
+        setListDistrict(respone.data.result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   const handleSubmit = async () => {
-    if (!name || !address || !phoneNumber) {
+    if (!name || !address || !phoneNumber || !district) {
       toast.error('Please enter complete information!');
       return;
     }
@@ -35,6 +47,7 @@ function AddStadium({ setIsRefresh }) {
     formData.append('name', name);
     formData.append('address', address);
     formData.append('phoneNumber', phoneNumber);
+    formData.append('idDistrict', district);
     if (image) {
       formData.append('img', image); // Đảm bảo gửi file đúng
     }
@@ -126,6 +139,25 @@ function AddStadium({ setIsRefresh }) {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
+              <div className="mb-2">
+                <label htmlFor="district" className="form-label">
+                  District
+                </label>
+                <select
+                  className="form-control"
+                  id="district"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                >
+                  <option value="">-- Select District --</option>
+                  {listDistrict.map((d) => (
+                    <option key={d.idDistrict} value={d.idDistrict}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="mb-2">
                 <label htmlFor="address" className="form-label">
                   Address

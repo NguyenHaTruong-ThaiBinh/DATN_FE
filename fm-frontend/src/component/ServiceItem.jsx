@@ -1,77 +1,81 @@
-import React from 'react';
+import Cookies from 'js-cookie';
 function ServiceItem({ service, setServicesData }) {
+  const role = Cookies.get('role');
+  const isAdmin = role === 'ADMIN';
   return (
     <>
       <div class="col-md-6 col-lg-3">
         <div class="card">
           <div class="card-body">
-            <div class="dropdown float-end">
-              <a
-                href="#"
-                class="text-muted fs-16 dropdown-toggle p-1"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <div
-                  class="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addservice"
-                  onClick={() => {
-                    setServicesData({
-                      id: service.idService,
-                    });
-                  }}
+            {isAdmin && (
+              <div class="dropdown float-end">
+                <a
+                  href="#"
+                  class="text-muted fs-16 dropdown-toggle p-1"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
                 >
-                  <i class="fas fa-plus me-2"></i> Add
-                </div>
-                <div
-                  class="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#detailservice"
-                  onClick={() =>
-                    setServicesData({
-                      id: service.idService,
-                    })
-                  }
-                >
-                  <i class="fa-regular fa-eye me-2"></i> View
-                </div>
-                <div
-                  class="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#updateservices"
-                  onClick={() =>
-                    setServicesData({
-                      id: service.idService,
-                      name: service.name,
-                      retailPrice: service.retailPrice,
-                      costPrice: service.costPrice,
-                      quantity: service.quantity,
-                      quantitySold: service.quantitySold,
-                    })
-                  }
-                >
-                  <i class="fa-solid fa-broom me-2"></i> Update
-                </div>
-                <div
-                  class="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#removeservice"
-                  onClick={() =>
-                    setServicesData({
-                      id: service.idService,
-                      name: service.name,
-                    })
-                  }
-                >
-                  <i class="fa-solid fa-trash-can me-2"></i> Delete
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addservice"
+                    onClick={() => {
+                      setServicesData({
+                        id: service.idService,
+                      });
+                    }}
+                  >
+                    <i class="fas fa-plus me-2"></i> Add
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#detailservice"
+                    onClick={() =>
+                      setServicesData({
+                        id: service.idService,
+                      })
+                    }
+                  >
+                    <i class="fa-regular fa-eye me-2"></i> View
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateservices"
+                    onClick={() =>
+                      setServicesData({
+                        id: service.idService,
+                        name: service.name,
+                        retailPrice: service.retailPrice,
+                        costPrice: service.costPrice,
+                        quantity: service.quantity,
+                        quantitySold: service.quantitySold,
+                      })
+                    }
+                  >
+                    <i class="fa-solid fa-broom me-2"></i> Update
+                  </div>
+                  <div
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#removeservice"
+                    onClick={() =>
+                      setServicesData({
+                        id: service.idService,
+                        name: service.name,
+                      })
+                    }
+                  >
+                    <i class="fa-solid fa-trash-can me-2"></i> Delete
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <img
                 src={service.img}

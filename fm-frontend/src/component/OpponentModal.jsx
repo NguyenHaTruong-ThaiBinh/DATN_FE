@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import {
   fetchData,
@@ -18,7 +19,7 @@ function OpponentModal({ selectedStadium, setIsRefresh }) {
   const [day, setDay] = useState('');
   const [notes, setNotes] = useState('');
   const [user, setUser] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   //lấy thông tin của User
   useEffect(() => {

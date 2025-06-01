@@ -1,9 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { fetchData, getMatchByIdStadium } from '../API/Api';
+import { useEffect, useState } from 'react';
+import {
+  fetchData,
+  getMatchByIdStadium,
+  getMatchByIdStadiumAndIdUser,
+} from '../API/Api';
 import ModalDetailMatch from '../modal/ModalDetailMatch';
 import CancelMatch from '../modal/ModalCancelMatch';
+import { useOutletContext } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../redux/slice/TitleSlice';
+import Cookies from 'js-cookie';
 
-function Match({ selectedStadium, setSelectedStadium, setIsRefresh }) {
+function Match() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Match'));
+  }, [dispatch]);
+  const { selectedStadium } = useOutletContext();
   const [listMatch, setListMatch] = useState([]);
   const [idStadium, setIdStadium] = useState('');
   const [listTime, setListTime] = useState([]);
@@ -11,6 +24,9 @@ function Match({ selectedStadium, setSelectedStadium, setIsRefresh }) {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDay, setSelectedDay] = useState('');
   const [isFresh, setIsFresh] = useState(false);
+  const idUser = Cookies.get('idUser');
+  const role = Cookies.get('role');
+  const isAdmin = role === 'ADMIN';
 
   useEffect(() => {
     if (selectedStadium) {
@@ -20,16 +36,26 @@ function Match({ selectedStadium, setSelectedStadium, setIsRefresh }) {
 
   //lấy match theo id Stadium
   useEffect(() => {
-    if (idStadium) {
-      getMatchByIdStadium('matching', idStadium)
-        .then((respone) => {
-          setListMatch(respone.data.result);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+    if (idStadium && idUser) {
+      if (isAdmin) {
+        getMatchByIdStadium('matching', idStadium)
+          .then((respone) => {
+            setListMatch(respone.data.result);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        getMatchByIdStadiumAndIdUser('matching', idStadium, idUser)
+          .then((respone) => {
+            setListMatch(respone.data.result);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
-  }, [idStadium, isFresh]);
+  }, [idStadium, isFresh, isAdmin, idUser]);
 
   //lấy time ra
   useEffect(() => {

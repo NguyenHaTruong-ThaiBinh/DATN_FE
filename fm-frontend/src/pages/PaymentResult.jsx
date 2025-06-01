@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { postPayFromData } from '../API/Api';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../redux/slice/TitleSlice';
 
 function PaymentSuccess() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Payment Successful'));
+  }, [dispatch]);
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { updateFormData } from '../API/Api';
+import { useState, useEffect } from 'react';
+import { updateService } from '../API/Api';
 import { toast } from 'react-toastify';
 
 function ModalUpdateServices({ servicesData, setIsRefresh }) {
@@ -22,7 +22,7 @@ function ModalUpdateServices({ servicesData, setIsRefresh }) {
     formData.append('retailPrice', retailPrice);
     formData.append('costPrice', costPrice);
     try {
-      await updateFormData('services', idService, formData);
+      await updateService('services', idService, formData);
       toast.success('Update Successfull');
       document
         .querySelector('#updateservices [data-bs-dismiss="modal"]')

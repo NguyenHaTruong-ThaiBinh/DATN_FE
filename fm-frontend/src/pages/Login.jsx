@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { postLogin } from '../API/Api';
+import Cookies from 'js-cookie';
 
 function Login() {
   const navigate = useNavigate();
@@ -20,11 +21,17 @@ function Login() {
     formData.append('password', pwd);
 
     try {
-      await postLogin('authentication', formData);
+      const response = await postLogin('authentication', formData);
+      if (response.data.code === 200) {
+        Cookies.set('idUser', response.data.result.idUser);
+        Cookies.set('role', response.data.result.role);
+        Cookies.set('token', response.data.result.token);
+        Cookies.set('changePwd', response.data.result.changePwd);
+      }
       toast.success('Login successful!');
       setTimeout(() => {
         navigate('/home');
-      }, 2000);
+      }, 1000);
     } catch (error) {
       console.error('Error: ', error);
       if (
@@ -38,6 +45,11 @@ function Login() {
       }
     }
   };
+
+  useEffect(() => {
+    console.log('Token', Cookies.get('token'));
+  });
+
   return (
     <>
       <ToastContainer
@@ -106,19 +118,7 @@ function Login() {
 
                         <div class="form-group row mt-3">
                           <div class="col-sm-6">
-                            <div class="form-check form-switch form-switch-success">
-                              <input
-                                class="form-check-input"
-                                type="checkbox"
-                                id="customSwitchSuccess"
-                              />
-                              <label
-                                class="form-check-label"
-                                for="customSwitchSuccess"
-                              >
-                                Remember me
-                              </label>
-                            </div>
+                            <div class="form-check form-switch form-switch-success"></div>
                           </div>
                           <div className="col-sm-6 text-end">
                             <span

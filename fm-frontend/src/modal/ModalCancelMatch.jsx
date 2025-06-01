@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { cancelMatch } from '../API/Api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 function CancelMatch({ matchData, setIsFresh }) {
   const [idMatch, setIdMatch] = useState('');
   const [time, setTime] = useState('');
   const [reason, setReason] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   useEffect(() => {
     if (matchData) {

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   getServiceByIdService,
-  updateServiceOrderByIdServiceOrder,
+  updateServiceOrderByIdServiceOrderByAdmin,
 } from '../API/Api';
 
 function ModalEditServiceOrder({
@@ -53,7 +53,7 @@ function ModalEditServiceOrder({
     const formData = new FormData();
     formData.append('quantity', quantity);
     try {
-      await updateServiceOrderByIdServiceOrder(
+      await updateServiceOrderByIdServiceOrderByAdmin(
         'serviceOrder',
         idServiceOrder,
         formData

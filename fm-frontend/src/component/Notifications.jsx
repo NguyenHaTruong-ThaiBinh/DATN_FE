@@ -6,7 +6,6 @@ function Notifications({ notification, setFresh }) {
   const [message, setMessage] = useState('');
   const [day, setDay] = useState('');
   const [idMessage, setIdMessage] = useState('');
-  const [hover, setHover] = useState(false);
   const [isRead, setIsRead] = useState(false);
 
   useEffect(() => {
@@ -29,44 +28,36 @@ function Notifications({ notification, setFresh }) {
   };
 
   return (
-    <div
-      className={`dropdown-item py-3 px-3 border-bottom d-flex align-items-start position-relative rounded-3 transition-all ${
-        hover ? 'bg-light' : ''
-      }`}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={(e) => e.stopPropagation()}
-      style={{
-        cursor: isRead ? 'default' : 'pointer',
-        opacity: isRead ? 0.6 : 1,
-        transition: 'all 0.3s ease-in-out',
-      }}
-    >
-      <div className="d-flex align-items-center w-100">
-        <div
-          className="flex-shrink-0 d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle"
-          style={{ width: 40, height: 40 }}
-        >
-          <i className="iconoir-wolf fs-4"></i>
-        </div>
-        <div className="flex-grow-1 ms-3 text-truncate">
-          <h6 className="mb-1 fw-semibold text-dark fs-14">Tin nhắn mới</h6>
-          <p className="mb-0 text-muted fs-13">{message}</p>
-          <small className="text-secondary">{day}</small>
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-10">
+            <div class="">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <i class="fas fa-envelope thumb-lg rounded-circle d-flex justify-center align-items-center bg-light p-3"></i>
+                </div>
+                <div class="flex-grow-1 ms-2 text-truncate">
+                  <h6 class="my-1 fw-medium text-dark fs-14">
+                    New Message!
+                    <small class="text-muted ps-2"></small>
+                  </h6>
+                  <p class="text-muted mb-0 text-wrap">{message}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 text-end align-self-center mt-sm-2 mt-lg-0">
+            <button
+              type="button"
+              class="btn btn bg-secondary-subtle text-secondary btn-sm"
+              onClick={handleMarkAsRead}
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
-
-      {hover && !isRead && (
-        <div className="position-absolute top-0 end-0 m-2">
-          <button
-            onClick={handleMarkAsRead}
-            className="btn btn-success btn-sm rounded-pill shadow-sm"
-            style={{ fontSize: '0.75rem', padding: '2px 8px' }}
-          >
-            ✔
-          </button>
-        </div>
-      )}
     </div>
   );
 }

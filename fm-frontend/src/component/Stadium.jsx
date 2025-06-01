@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-function Stadium({ field, selectedStadium, setStadiumData, from}) {
+function Stadium({ field, selectedStadium, setStadiumData, from }) {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
+  const [district, setDistrict] = useState('');
+  const role = Cookies.get('role');
+  const isAdmin = role === 'ADMIN';
 
   useEffect(() => {
     if (selectedStadium) {
       setPhoneNumber(selectedStadium.phoneNumber);
       setAddress(selectedStadium.address);
+      setDistrict(selectedStadium.nameDistrict);
     }
-  },[selectedStadium]);
+  }, [selectedStadium]);
 
   const handleEditClick = () => {
     setStadiumData({
@@ -100,16 +105,18 @@ function Stadium({ field, selectedStadium, setStadiumData, from}) {
                     className="dropdown-menu dropdown-menu-end"
                     aria-labelledby="dLabel11"
                   >
-                    <a
-                      className="dropdown-item"
-                      href="/"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editStadium"
-                      onClick={handleEditClick}
-                    >
-                      <i className="fas fa-pen me-2 text-primary"></i> Edit
-                      Field
-                    </a>
+                    {isAdmin && (
+                      <a
+                        className="dropdown-item"
+                        href="/"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editStadium"
+                        onClick={handleEditClick}
+                      >
+                        <i className="fas fa-pen me-2 text-primary"></i> Edit
+                        Field
+                      </a>
+                    )}
                     <a
                       className="dropdown-item"
                       href="/"
@@ -120,31 +127,35 @@ function Stadium({ field, selectedStadium, setStadiumData, from}) {
                       <i className="fas fa-eye me-2 text-primary"></i> View
                       Price
                     </a>
-                    <a
-                      className="dropdown-item"
-                      href="/"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editpricefield"
-                      onClick={handleEditPrice}
-                    >
-                      <i className="fas fa-dollar-sign me-2 text-warning"></i>{' '}
-                      Edit Price
-                    </a>
-                    <a
-                      className="dropdown-item"
-                      href="/"
-                      data-bs-toggle="modal"
-                      data-bs-target="#deleteStadium"
-                      onClick={handleDelete}
-                    >
-                      <i className="fas fa-trash-alt me-2 text-danger"></i>{' '}
-                      Delete
-                    </a>
+                    {isAdmin && (
+                      <a
+                        className="dropdown-item"
+                        href="/"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editpricefield"
+                        onClick={handleEditPrice}
+                      >
+                        <i className="fas fa-dollar-sign me-2 text-warning"></i>{' '}
+                        Edit Price
+                      </a>
+                    )}
+                    {isAdmin && (
+                      <a
+                        className="dropdown-item"
+                        href="/"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteStadium"
+                        onClick={handleDelete}
+                      >
+                        <i className="fas fa-trash-alt me-2 text-danger"></i>{' '}
+                        Delete
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
               <p class="text-muted">
-                <span>📍</span> {address}
+                <span>📍</span> {address} - {district}
               </p>
               <hr class="hr-dashed" />
               <div class="d-flex justify-content-between">

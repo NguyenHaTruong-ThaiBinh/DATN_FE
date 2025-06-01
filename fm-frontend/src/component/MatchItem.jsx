@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { updateServiceOrderByIdServiceOrder } from '../API/Api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 function MatchItem({ matching, setMatchingData, setIsRefresh }) {
   const [idMatching, setIdMatching] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   const handleAccept = async () => {
     const formData = new FormData();

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { fetchDataById, postFormData } from '../API/Api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 function CompleteModal({ selectedReport, setIsRefresh }) {
   const [idReportFacility, setIdReportFacility] = useState('');
   const [nameFacility, setNameFacility] = useState('');
   const [nameField, setNameField] = useState('');
   const [user, setUser] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
   const today = new Date().toISOString().split('T')[0];
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import React from 'react';
+import Cookies from 'js-cookie';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   fetchDataById,
@@ -7,8 +7,14 @@ import {
   postFormData,
 } from '../../API/Api';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { updateTitleHeader } from '../../redux/slice/TitleSlice';
 
 function FormBooking() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateTitleHeader('Booking'));
+  }, [dispatch]);
   const { state } = useLocation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,11 +28,15 @@ function FormBooking() {
   const [idPrice, setIdPrice] = useState('');
   const [user, setUser] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   const handleBack = () => {
     navigate(`/${from}`);
   };
+
+  useEffect(() => {
+    console.log('ID', idUser);
+  }, [idUser]);
 
   const handlePay = async () => {
     if (!idUser || !idPrice || !date) {

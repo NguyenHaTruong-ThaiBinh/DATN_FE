@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchDataById, postFormData } from '../API/Api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 function InvoiceModal({ booking, isFresh, selectedStadium }) {
   const [nameStadium, setNameStadium] = useState('');
@@ -15,7 +16,7 @@ function InvoiceModal({ booking, isFresh, selectedStadium }) {
   const [idBooking, setIdBooking] = useState('');
   const [listServiceOrder, setListServiceOrder] = useState('');
   const [idStadium, setIdStadium] = useState('');
-  const idUser = localStorage.getItem('idUser');
+  const idUser = Cookies.get('idUser');
 
   useEffect(() => {
     if (selectedStadium) {

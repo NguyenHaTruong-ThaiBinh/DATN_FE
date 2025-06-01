@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { updateEnableField } from '../API/Api';
+import { updateEnableService } from '../API/Api';
 import { toast } from 'react-toastify';
 
 function ModalRemoveServices({ servicesData, setIsRefresh }) {
@@ -11,7 +11,7 @@ function ModalRemoveServices({ servicesData, setIsRefresh }) {
   }, [servicesData]);
   const handleRemove = async () => {
     try {
-      await updateEnableField('services', idService);
+      await updateEnableService('services', idService);
       toast.success('Remove Successfull');
       document
         .querySelector('#removeservice [data-bs-dismiss="modal"]')

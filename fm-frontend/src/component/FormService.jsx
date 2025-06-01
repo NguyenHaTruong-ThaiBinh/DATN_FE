@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { postFormData } from '../API/Api';
+import { addService } from '../API/Api';
 import { toast } from 'react-toastify';
 
 function FormService({ selectedStadium, setIsRefresh }) {
@@ -36,7 +36,7 @@ function FormService({ selectedStadium, setIsRefresh }) {
       formData.append('img', image);
     }
     try {
-      await postFormData('services', formData);
+      await addService('services', formData);
       toast.success('Successfull!');
       document.querySelector('#addService [data-bs-dismiss="modal"]')?.click();
       handleReset();

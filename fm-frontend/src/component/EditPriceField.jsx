@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   fetchData,
   fetchDataById,
-  postFormData,
-  updateFormData,
+  postPrice,
+  updatePrice,
 } from '../API/Api';
 import { toast } from 'react-toastify';
 
@@ -73,7 +73,7 @@ function EditPriceField({ stadiumData, setIsFresh }) {
     formData.append('idTime', selectedTime);
     formData.append('price', price);
     try {
-      await postFormData('price', formData);
+      await postPrice('price', formData);
       toast.success('Successfull!');
       setIsFresh((prev) => !prev);
       setFresh((prev) => !prev);
@@ -85,10 +85,10 @@ function EditPriceField({ stadiumData, setIsFresh }) {
     }
   };
   const handleUpdatePrice = async () => {
-    const formData = new FormData();  
+    const formData = new FormData();
     formData.append('price', price);
     try {
-      await updateFormData('price', idPrice, formData);
+      await updatePrice('price', idPrice, formData);
       toast.success('Update Success');
       setIsFresh((prev) => !prev);
       setFresh((prev) => !prev);

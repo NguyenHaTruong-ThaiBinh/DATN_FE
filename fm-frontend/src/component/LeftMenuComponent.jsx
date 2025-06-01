@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const LeftMenuComponent = () => {
   const location = useLocation(); // Lấy đường dẫn hiện tại
   const navigate = useNavigate();
+  const role = Cookies.get('role');
+  const isAdmin = role === 'ADMIN';
 
   const [activeMenu, setActiveMenu] = useState(location.pathname);
 
@@ -52,10 +55,14 @@ const LeftMenuComponent = () => {
 
                 {/* Home */}
                 <li
-                  className={`nav-item ${activeMenu === '/home' ? 'active' : ''}`}
+                  className={`nav-item ${
+                    activeMenu === '/home' ? 'active' : ''
+                  }`}
                 >
                   <div
-                    className={`nav-link ${activeMenu === '/home' ? 'active' : ''}`}
+                    className={`nav-link ${
+                      activeMenu === '/home' ? 'active' : ''
+                    }`}
                     onClick={() => navigate('/home')}
                   >
                     <i className="iconoir-home menu-icon"></i>
@@ -143,21 +150,24 @@ const LeftMenuComponent = () => {
                   </div>
                 </li>
                 {/* users */}
-                <li
-                  className={`nav-item ${
-                    activeMenu === '/users' ? 'active' : ''
-                  }`}
-                >
-                  <div
-                    className={`nav-link ${
+                {isAdmin && (
+                  <li
+                    className={`nav-item ${
                       activeMenu === '/users' ? 'active' : ''
                     }`}
-                    onClick={() => navigate('/users')}
                   >
-                    <i className="iconoir-group menu-icon"></i>
-                    <span>Users</span>
-                  </div>
-                </li>
+                    <div
+                      className={`nav-link ${
+                        activeMenu === '/users' ? 'active' : ''
+                      }`}
+                      onClick={() => navigate('/users')}
+                    >
+                      <i className="iconoir-group menu-icon"></i>
+                      <span>Users</span>
+                    </div>
+                  </li>
+                )}
+
                 {/* Calendar */}
                 <li
                   className={`nav-item ${
@@ -175,21 +185,23 @@ const LeftMenuComponent = () => {
                   </div>
                 </li>
                 {/* Facility */}
-                <li
-                  className={`nav-item ${
-                    activeMenu === '/facility' ? 'active' : ''
-                  }`}
-                >
-                  <div
-                    className={`nav-link ${
+                {isAdmin && (
+                  <li
+                    className={`nav-item ${
                       activeMenu === '/facility' ? 'active' : ''
                     }`}
-                    onClick={() => navigate('/facility')}
                   >
-                    <i className="iconoir-paste-clipboard menu-icon"></i>
-                    <span>Facility</span>
-                  </div>
-                </li>
+                    <div
+                      className={`nav-link ${
+                        activeMenu === '/facility' ? 'active' : ''
+                      }`}
+                      onClick={() => navigate('/facility')}
+                    >
+                      <i className="iconoir-paste-clipboard menu-icon"></i>
+                      <span>Facility</span>
+                    </div>
+                  </li>
+                )}
                 <li className="menu-label mt-2">
                   <span>Feature</span>
                 </li>
@@ -263,43 +275,29 @@ const LeftMenuComponent = () => {
                     </ul>
                   </div>
                 </li>
-                {/* Chat */}
-                <li
-                  className={`nav-item ${
-                    activeMenu === '/chat' ? 'active' : ''
-                  }`}
-                >
-                  <div
-                    className={`nav-link ${
-                      activeMenu === '/chat' ? 'active' : ''
-                    }`}
-                    onClick={() => navigate('/chat')}
-                  >
-                    <i className="iconoir-chat-bubble menu-icon"></i>
-                    <span>Chat</span>
-                  </div>
-                </li>
                 {/* report */}
-                <li
-                  className={`nav-item ${
-                    activeMenu === '/report' ? 'active' : ''
-                  }`}
-                >
-                  <div
-                    className={`nav-link ${
+                {isAdmin && (
+                  <li
+                    className={`nav-item ${
                       activeMenu === '/report' ? 'active' : ''
                     }`}
-                    onClick={() => navigate('/report')}
                   >
-                    <i className="iconoir-stats-report menu-icon"></i>
-                    <span>Report</span>
-                  </div>
-                </li>
-                {/* map */}
+                    <div
+                      className={`nav-link ${
+                        activeMenu === '/report' ? 'active' : ''
+                      }`}
+                      onClick={() => navigate('/report')}
+                    >
+                      <i className="iconoir-stats-report menu-icon"></i>
+                      <span>Report</span>
+                    </div>
+                  </li>
+                )}
+                {/* search */}
                 <li className="nav-item">
                   <a
                     className={`nav-link ${
-                      activeMenu === '/weather' || activeMenu === '/map'
+                      activeMenu === '/weather' || activeMenu === '/search'
                         ? 'active'
                         : ''
                     }`}
@@ -307,7 +305,7 @@ const LeftMenuComponent = () => {
                     data-bs-toggle="collapse"
                     role="button"
                     aria-expanded={
-                      activeMenu === '/weather' || activeMenu === '/map'
+                      activeMenu === '/weather' || activeMenu === '/search'
                     }
                     aria-controls="sidebarFeature"
                   >
@@ -316,7 +314,7 @@ const LeftMenuComponent = () => {
                   </a>
                   <div
                     className={`collapse ${
-                      activeMenu === '/weather' || activeMenu === '/map'
+                      activeMenu === '/weather' || activeMenu === '/search'
                         ? 'show'
                         : ''
                     }`}
@@ -326,12 +324,12 @@ const LeftMenuComponent = () => {
                       <li className="nav-item">
                         <div
                           className={`nav-link ${
-                            activeMenu === '/map' ? 'active' : ''
+                            activeMenu === '/search' ? 'active' : ''
                           }`}
-                          onClick={() => navigate('/map')}
+                          onClick={() => navigate('/search')}
                         >
                           <i className="fas fa-map-marker-alt menu-icon"></i>
-                          <span>Map</span>
+                          <span>Search</span>
                         </div>
                       </li>
                       <li className="nav-item">
